@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import testRouter from './src/routers/filter.routes'
+import filterRouter from './src/routers/filter.routes'
 
 dotenv.config();
 
@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
   res.send("Express + TypeScript Server");
 });
 
-app.use('/filters', testRouter)
+app.use('/filters', filterRouter)
 
 app.listen(port, () => {
   console.log(`⚡️ Server is running at http://localhost:${port}`);
