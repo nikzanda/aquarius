@@ -10,9 +10,11 @@ const port = process.env.PORT;
 
 app.use(cors())
 
-app.get("/", (req, res) => {
-  res.send("Express + TypeScript Server");
-});
+// app.get("/", (req, res) => {
+//   res.send("Express + TypeScript Server");
+// });
+const frontendPath = __dirname + '/../frontend/dist'
+app.use('/', express.static(frontendPath))
 
 app.use('/filters', filterRouter)
 
