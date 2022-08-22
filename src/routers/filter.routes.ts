@@ -1,8 +1,8 @@
-import { Router } from "express";
-import * as filterController from '../controllers/filter.controller'
+import { Router } from 'express';
+import * as filterController from '../controllers/filter.controller';
 
-const router = Router()
+const router = Router();
 
-router.get('/', filterController.findAll)
+router.get('/', filterController.findAll);
 
-export default router
+export default router;
