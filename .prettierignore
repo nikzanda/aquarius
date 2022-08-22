@@ -1,0 +1,10 @@
+# Ignore artifacts:
+dist
+build
+coverage
+
+# Ignore files
+*.yaml
+
+# Ignore folders
+frontend

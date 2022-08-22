@@ -1,9 +1,9 @@
-version: "3.8"
+version: '3.8'
 services:
   mysql:
     image: mysql
     ports:
       - 3307:3306
     environment:
-      MYSQL_DATABASE: "aquarius"
+      MYSQL_DATABASE: 'aquarius'
       MYSQL_ALLOW_EMPTY_PASSWORD: true
