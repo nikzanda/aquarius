@@ -10,9 +10,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String
+  durationDays Int      @db.UnsignedInt
+  optional     Boolean  @default(false)
+  filters      Filter[]
+
+  @@map("categories")
+}
+
 model Filter {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
+  id             Int      @id @default(autoincrement())
+  isActive       Boolean  @default(true)
+  expirationDate DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  category       Category @relation(fields: [categoryId], references: [id])
+  categoryId     Int
 
   @@map("filters")
 }
