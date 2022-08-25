@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import axios from "axios";
 import { reactive } from "vue";
-import { NSpace, NCard, NRow, NButton, NIcon, NTime } from 'naive-ui'
+import { NSpace, NCard, NRow, NButton, NIcon, NTime, NImage } from 'naive-ui'
 import { DotMark } from '@vicons/carbon'
 import type { Category } from "@/types/models";
+import {getImageUrl} from '../helpers/helpers'
 
 const categories = reactive<Category[]>([]);
 
@@ -20,7 +21,10 @@ axios("http://localhost:8000/categories")
       <n-card v-for="category in categories" :key="category.id" size="medium">
         <template #header>
           <!-- <n-space align="baseline"> -->
-<n-icon color="red">
+
+        <n-image width="100" height="100" :src="getImageUrl(category.name)" />
+
+          <n-icon color="red">
             <dot-mark />
           </n-icon>
           <strong>{{category.name}}</strong>
