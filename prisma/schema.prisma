@@ -11,24 +11,26 @@ datasource db {
 }
 
 model Category {
-  id           Int      @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   name         String
   description  String
-  durationDays Int      @db.UnsignedInt
-  optional     Boolean  @default(false)
-  filters      Filter[]
+  durationDays Int     @db.UnsignedInt
+  optional     Boolean @default(false)
+
+  filters Filter[]
 
   @@map("categories")
 }
 
 model Filter {
   id             Int      @id @default(autoincrement())
+  categoryId     Int
   isActive       Boolean  @default(true)
   expirationDate DateTime
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  category       Category @relation(fields: [categoryId], references: [id])
-  categoryId     Int
+
+  category Category @relation(fields: [categoryId], references: [id])
 
   @@map("filters")
 }

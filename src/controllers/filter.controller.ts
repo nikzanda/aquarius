@@ -1,11 +1,23 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import { addDays } from 'date-fns';
+import { TypedRequestQuery } from '../types/commons';
+import { FilterQuery } from '../types/filter';
 
 const { filter: filterDB, category: categoryDB } = new PrismaClient();
 
-export const findAll = async (req: Request, res: Response) => {
-  const filters = await filterDB.findMany();
+export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: Response) => {
+  const { skip, take, categoryId, isActive } = req.query;
+
+  const filters = await filterDB.findMany({
+    where: {
+      ...(categoryId && { categoryId: +categoryId }),
+      ...(isActive && { isActive: ['true', 'yes', '1'].includes(isActive) }),
+    },
+    skip: +skip,
+    ...(+take > 0 && { take: +take }),
+  });
+
   res.json(filters);
 };
 
