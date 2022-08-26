@@ -1,47 +1,27 @@
 <script setup lang="ts">
 import axios from "axios";
 import { reactive } from "vue";
-import { NSpace, NCard, NRow, NButton, NIcon, NTime, NImage } from 'naive-ui'
-import { DotMark } from '@vicons/carbon'
+import { NSpace, NGrid, NGridItem } from 'naive-ui'
 import type { Category } from "@/types/models";
-import {getImageUrl} from '../helpers/helpers'
+import CategoryCard from './components/CategoryCard.vue'
 
 const categories = reactive<Category[]>([]);
 
-axios("http://localhost:8000/categories")
+axios("http://localhost:8000/categories", {params: {
+  skip: 0,
+  take: 0,
+  include: 'filters'
+}})
   .then(({ data }) => categories.push(...data))
   .catch(console.error);
 </script>
 
 <template>
-  <n-row>
     <h1>FILTRI</h1>
 
-    <n-space>
-      <n-card v-for="category in categories" :key="category.id" size="medium">
-        <template #header>
-          <!-- <n-space align="baseline"> -->
-
-        <n-image width="100" height="100" :src="getImageUrl(category.name)" />
-
-          <n-icon color="red">
-            <dot-mark />
-          </n-icon>
-          <strong>{{category.name}}</strong>
-          <!-- </n-space> -->
-        </template>
-        <!-- {{category.description}} -->
-        <n-space vertical>
-          <span>Inserito il <n-time format="dd-MM-yyyy" /></span>
-          <span>Scade il <n-time format="dd-MM-yyyy" /></span>
-        </n-space>
-        <template #action>
-          <n-space justify="end">
-          <n-button type="primary">test</n-button>
-          <n-button type="primary">test</n-button>
-          </n-space>
-        </template>
-      </n-card>
-    </n-space>
-  </n-row>
+    <n-grid x-gap="12" :cols="4" >
+      <n-grid-item v-for="category in categories" :key="category.id"  >
+      <category-card :category="category" />
+      </n-grid-item>
+    </n-grid>
 </template>

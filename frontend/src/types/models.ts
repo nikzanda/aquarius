@@ -8,6 +8,7 @@ export type Category = {
   description: string
   durationDays: number
   optional: boolean
+  filters?: Filter[]
 }
 
 /**
@@ -21,4 +22,5 @@ export type Filter = {
   createdAt: Date
   updatedAt: Date
   categoryId: number
+  category?: Category
 }
