@@ -10,12 +10,12 @@ export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: Response
   const { skip, take, categoryId, isActive } = req.query;
 
   const filters = await filterDB.findMany({
-    where: {
-      ...(categoryId && { categoryId: +categoryId }),
-      ...(isActive && { isActive: ['true', 'yes', '1'].includes(isActive) }),
-    },
     skip: +skip,
     ...(+take > 0 && { take: +take }),
+    where: {
+      ...(categoryId && { categoryId: +categoryId }),
+      ...(isActive && { isActive: ['true', '1'].includes(isActive) }),
+    },
   });
 
   res.json(filters);
