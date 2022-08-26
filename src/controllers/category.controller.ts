@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 
 const { category: categoryDB } = new PrismaClient();
 
+// TODO: aggiungere include nella query
 export const findAll = async (req: Request, res: Response) => {
   const categories = await categoryDB.findMany();
   res.json(categories);
