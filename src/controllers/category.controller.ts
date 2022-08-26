@@ -12,7 +12,7 @@ export const findAll = async (req: TypedRequestQuery<CategoryQuery>, res: Respon
     skip: +skip,
     ...(+take > 0 && { take: +take }),
     where: {
-      ...(name && { name }),
+      ...(name && { name: { search: name } }),
       ...(optional && { optional: ['true', '1'].includes(optional) }),
     },
     ...(include && {
