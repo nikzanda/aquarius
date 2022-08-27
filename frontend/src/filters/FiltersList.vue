@@ -10,7 +10,7 @@ const { t } = useI18n();
 
 const categories = reactive<Category[]>([]);
 
-axios('http://localhost:8000/categories', {
+axios('http://localhost:8000/api/categories', {
   params: {
     skip: 0,
     take: 0,
