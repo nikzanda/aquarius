@@ -5,7 +5,11 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      redirect: '/filters',
+    },
+    {
+      path: '/filters',
+      name: 'filters',
       component: () => import('../filters/FiltersList.vue'),
     },
   ],
