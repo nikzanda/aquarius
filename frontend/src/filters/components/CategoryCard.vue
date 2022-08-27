@@ -6,6 +6,7 @@ import { DotMark } from '@vicons/carbon';
 import { getImageUrl } from '../../helpers/helpers';
 import { differenceInDays } from 'date-fns';
 import { useI18n } from 'vue-i18n';
+import { camelCase } from 'lodash';
 
 const { t } = useI18n();
 
@@ -18,8 +19,6 @@ const daysBeforeExpire = filter && differenceInDays(new Date(filter.expirationDa
 
 const getColor = () => {
   if (!filter) return 'grey';
-
-  console.log(daysBeforeExpire);
 
   switch (true) {
     case daysBeforeExpire >= 3:
@@ -37,7 +36,7 @@ const getColor = () => {
 <template>
   <n-card size="medium">
     <template #header>
-      <n-image width="100" height="100" :src="getImageUrl(category.name)" />
+      <n-image width="100" height="100" :src="getImageUrl(camelCase(category.name))" />
       <n-icon :color="getColor()">
         <dot-mark />
       </n-icon>
