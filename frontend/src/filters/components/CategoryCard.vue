@@ -7,10 +7,12 @@ import { getImageUrl } from '../../helpers/helpers';
 import { differenceInDays } from 'date-fns';
 import { useI18n } from 'vue-i18n';
 import { camelCase } from 'lodash';
-import axios from 'axios';
+import { injectStrict } from '@/helpers/injectTypes';
+import { AxiosKey } from '@/symbols';
 
 const { t } = useI18n();
 const message = useMessage();
+const axios = injectStrict(AxiosKey);
 
 const props = defineProps({
   category: { type: Object as PropType<Category>, required: true },
@@ -38,7 +40,7 @@ const removeFilter = () => {
   if (!filter) return;
 
   axios
-    .patch(`http://localhost:8000/api/filters/${filter.id}`)
+    .patch(`/filters/${filter.id}`)
     .then(() => message.success('ok!'))
     .catch((error) => {
       console.error(error);
@@ -48,7 +50,7 @@ const removeFilter = () => {
 
 const renewFilter = () => {
   axios
-    .post('http://localhost:8000/api/filters', {
+    .post('/filters', {
       categoryId: props.category.id,
     })
     .then(() => message.success('ok!'))

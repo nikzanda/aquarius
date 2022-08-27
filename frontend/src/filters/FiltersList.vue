@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import axios from 'axios';
 import { reactive } from 'vue';
 import { NGrid, NGridItem } from 'naive-ui';
 import type { Category } from '@/types/models';
 import CategoryCard from './components/CategoryCard.vue';
 import { useI18n } from 'vue-i18n';
+import { injectStrict } from '@/helpers/injectTypes';
+import { AxiosKey } from '@/symbols';
 
 const { t } = useI18n();
+const axios = injectStrict(AxiosKey);
 
 const categories = reactive<Category[]>([]);
 
-axios('http://localhost:8000/api/categories', {
+axios('/categories', {
   params: {
     skip: 0,
     take: 0,
