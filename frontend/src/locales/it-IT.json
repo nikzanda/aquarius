@@ -1,0 +1,7 @@
+{
+  "filters": {
+    "name": "Filtri",
+    "insertedAt": "Inserito il",
+    "expiresIn": "Scade tra {days} giorni"
+  }
+}

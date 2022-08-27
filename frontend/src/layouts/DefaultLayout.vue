@@ -3,6 +3,9 @@ import { RouterLink, RouterView } from 'vue-router';
 import { NLayout, NLayoutHeader, NLayoutContent, NMenu, type MenuOption, NIcon } from 'naive-ui';
 import { h, ref, type Component } from 'vue';
 import { Filter } from '@vicons/carbon';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const renderIcon = (icon: Component) => () => h(NIcon, null, { default: () => h(icon) });
 
@@ -16,7 +19,7 @@ const menuOptions: MenuOption[] = [
             name: 'filters',
           },
         },
-        { default: 'Filtri' }
+        { default: t('filters.name') }
       ),
     key: 'filters',
     icon: renderIcon(Filter),

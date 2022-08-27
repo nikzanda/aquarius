@@ -5,6 +5,9 @@ import { NSpace, NCard, NButton, NIcon, NTime, NImage } from 'naive-ui';
 import { DotMark } from '@vicons/carbon';
 import { getImageUrl } from '../../helpers/helpers';
 import { differenceInDays } from 'date-fns';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   category: { type: Object as PropType<Category>, required: true },
@@ -41,8 +44,12 @@ const getColor = () => {
       <strong>{{ category.name }}</strong>
     </template>
     <n-space vertical>
-      <span v-if="filter">Inserito il <n-time :time="new Date(filter.createdAt)" format="dd-MM-yyyy" /></span>
-      <span v-if="filter">Scade tra {{ daysBeforeExpire }} giorni</span>
+      <template v-if="filter">
+        <span> {{ t('filters.insertedAt') }} <n-time :time="new Date(filter.createdAt)" format="dd-MM-yyyy" /> </span>
+        <span>
+          {{ t('filters.expiresIn', { days: daysBeforeExpire }) }}
+        </span>
+      </template>
     </n-space>
     <template #action>
       <n-space justify="end">
