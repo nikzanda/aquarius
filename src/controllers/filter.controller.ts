@@ -21,16 +21,18 @@ export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: Response
   res.json(filters);
 };
 
+// TODO: tipizzare params
 export const findOne = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const category = await filterDB.findUnique({
+  const filter = await filterDB.findUnique({
     where: {
       id: +id,
     },
   });
-  res.json(category);
+  res.json(filter);
 };
 
+// TODO: tipizzare il body
 export const create = async (req: Request, res: Response) => {
   const { categoryId } = req.body;
 
@@ -67,4 +69,30 @@ export const create = async (req: Request, res: Response) => {
   });
 
   res.status(201).json(newFilter);
+};
+
+// TODO: tipizzare il body
+export const update = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const exists = await filterDB.count({
+    where: {
+      id: +id,
+    },
+  });
+
+  if (!exists) {
+    return res.sendStatus(404);
+  }
+
+  const updatedFilter = await filterDB.update({
+    where: {
+      id: +id,
+    },
+    data: {
+      isActive: false,
+    },
+  });
+
+  res.status(200).json(updatedFilter);
 };

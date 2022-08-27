@@ -2,6 +2,8 @@
   "filters": {
     "name": "Filtri",
     "insertedAt": "Inserito il",
-    "expiresIn": "Scade tra {days} giorni"
+    "expiresIn": "Scade tra {days} giorni",
+    "sureToRemove": "Sei sicuro di voler rimuovere il filtro?",
+    "sureToRenew": "Sei sicuro di voler inserire un nuovo filtro?"
   }
 }

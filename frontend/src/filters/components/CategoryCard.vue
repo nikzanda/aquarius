@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import type { Category } from '@/types/models';
 import type { PropType } from 'vue';
-import { NSpace, NCard, NButton, NIcon, NTime, NImage } from 'naive-ui';
-import { DotMark } from '@vicons/carbon';
+import { NSpace, NCard, NButton, NIcon, NTime, NImage, NPopconfirm, useMessage } from 'naive-ui';
+import { DotMark, Renew, TrashCan } from '@vicons/carbon';
 import { getImageUrl } from '../../helpers/helpers';
 import { differenceInDays } from 'date-fns';
 import { useI18n } from 'vue-i18n';
 import { camelCase } from 'lodash';
+import axios from 'axios';
 
 const { t } = useI18n();
+const message = useMessage();
 
 const props = defineProps({
   category: { type: Object as PropType<Category>, required: true },
@@ -31,6 +33,30 @@ const getColor = () => {
       return 'red';
   }
 };
+
+const removeFilter = () => {
+  if (!filter) return;
+
+  axios
+    .patch(`http://localhost:8000/api/filters/${filter.id}`)
+    .then(() => message.success('ok!'))
+    .catch((error) => {
+      console.error(error);
+      message.error('error');
+    });
+};
+
+const renewFilter = () => {
+  axios
+    .post('http://localhost:8000/api/filters', {
+      categoryId: props.category.id,
+    })
+    .then(() => message.success('ok!'))
+    .catch((error) => {
+      console.error(error);
+      message.error('error');
+    });
+};
 </script>
 
 <template>
@@ -52,8 +78,27 @@ const getColor = () => {
     </n-space>
     <template #action>
       <n-space justify="end">
-        <n-button type="primary">test</n-button>
-        <n-button type="primary">test</n-button>
+        <n-popconfirm @positive-click="() => removeFilter()">
+          <template #trigger>
+            <n-button tertiary circle type="error" :disabled="!filter">
+              <template #icon>
+                <n-icon><trash-can /></n-icon>
+              </template>
+            </n-button>
+          </template>
+          {{ t('filters.sureToRemove') }}
+        </n-popconfirm>
+
+        <n-popconfirm @positive-click="() => renewFilter()">
+          <template #trigger>
+            <n-button tertiary circle type="primary">
+              <template #icon>
+                <n-icon><renew /></n-icon>
+              </template>
+            </n-button>
+          </template>
+          {{ t('filters.sureToRenew') }}
+        </n-popconfirm>
       </n-space>
     </template>
   </n-card>
