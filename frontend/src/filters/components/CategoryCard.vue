@@ -97,28 +97,28 @@ const renewFilter = async () => {
 
 <template>
   <n-spin :show="loading">
-    <n-card size="small" >
+    <n-card size="small">
       <n-grid x-gap="12" :cols="4">
         <n-gi span="1">
           <n-image width="80" height="80" :src="getImageUrl(camelCase(category.name))" />
         </n-gi>
         <n-gi span="3">
           <n-space justify="space-between">
-          <n-h3>
-            <n-icon :color="getLightColor()">
-              <dot-mark />
-            </n-icon>
-            {{ category.name }}
-          </n-h3>
-          <n-tooltip>
-            <template #trigger>
-              <n-icon size="20" color="#00bfff">
-              <information />
-            </n-icon>
-            </template>
-            {{category.description}}
-          </n-tooltip>
-        </n-space>
+            <n-h3>
+              <n-icon :color="getLightColor()">
+                <dot-mark />
+              </n-icon>
+              {{ category.name }}
+            </n-h3>
+            <n-tooltip>
+              <template #trigger>
+                <n-icon size="20" color="#00bfff">
+                  <information />
+                </n-icon>
+              </template>
+              {{ category.description }}
+            </n-tooltip>
+          </n-space>
           <n-descriptions v-if="filter" label-placement="left" :label-style="{ color: 'grey' }">
             <n-descriptions-item :label="t('filters.insertedAt')">
               <n-time :time="new Date(filter.createdAt)" format="dd/MM/yyyy" />
