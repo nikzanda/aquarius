@@ -1,8 +1,25 @@
 <script setup lang="ts">
 import type { Category, Filter } from '@/types/models';
 import { computed, ref, type PropType } from 'vue';
-import { NSpace, NCard, NButton, NIcon, NTime, NImage, NPopconfirm, NSpin, useMessage } from 'naive-ui';
-import { DotMark, Renew, TrashCan } from '@vicons/carbon';
+import {
+  NSpace,
+  NCard,
+  NButton,
+  NIcon,
+  NTime,
+  NImage,
+  NPopconfirm,
+  NSpin,
+  NGrid,
+  NGi,
+  NDescriptions,
+  NDescriptionsItem,
+  NNumberAnimation,
+  NH3,
+  NTooltip,
+  useMessage,
+} from 'naive-ui';
+import { DotMark, Renew, TrashCan, Information } from '@vicons/carbon';
 import { getImageUrl } from '../../helpers/helpers';
 import { differenceInDays } from 'date-fns';
 import { useI18n } from 'vue-i18n';
@@ -80,22 +97,40 @@ const renewFilter = async () => {
 
 <template>
   <n-spin :show="loading">
-    <n-card size="medium">
-      <template #header>
-        <n-image width="100" height="100" :src="getImageUrl(camelCase(category.name))" />
-        <n-icon :color="getLightColor()">
-          <dot-mark />
-        </n-icon>
-        <strong>{{ category.name }}</strong>
-      </template>
-      <n-space vertical>
-        <template v-if="filter">
-          <span> {{ t('filters.insertedAt') }} <n-time :time="new Date(filter.createdAt)" format="dd-MM-yyyy" /> </span>
-          <span>
-            {{ t('filters.expiresIn', { days: daysBeforeExpire }) }}
-          </span>
-        </template>
-      </n-space>
+    <n-card size="small" >
+      <n-grid x-gap="12" :cols="4">
+        <n-gi span="1">
+          <n-image width="80" height="80" :src="getImageUrl(camelCase(category.name))" />
+        </n-gi>
+        <n-gi span="3">
+          <n-space justify="space-between">
+          <n-h3>
+            <n-icon :color="getLightColor()">
+              <dot-mark />
+            </n-icon>
+            {{ category.name }}
+          </n-h3>
+          <n-tooltip>
+            <template #trigger>
+              <n-icon size="20" color="#00bfff">
+              <information />
+            </n-icon>
+            </template>
+            {{category.description}}
+          </n-tooltip>
+        </n-space>
+          <n-descriptions v-if="filter" label-placement="left" :label-style="{ color: 'grey' }">
+            <n-descriptions-item :label="t('filters.insertedAt')">
+              <n-time :time="new Date(filter.createdAt)" format="dd/MM/yyyy" />
+            </n-descriptions-item>
+            <n-descriptions-item :label="t('filters.expiresIn')">
+              <n-number-animation :from="category.durationDays" :to="daysBeforeExpire" />
+              {{ t('filters.days') }}
+            </n-descriptions-item>
+          </n-descriptions>
+        </n-gi>
+      </n-grid>
+
       <template #action>
         <n-space justify="end">
           <n-popconfirm @positive-click="() => removeFilter()">
