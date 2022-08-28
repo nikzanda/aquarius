@@ -21,7 +21,7 @@ const props = defineProps({
 const filter = ref<Filter | undefined>(props.category.filters![0]);
 const loading = ref(false);
 const daysBeforeExpire = computed(() =>
-  filter.value ? differenceInDays(new Date(filter.value.expirationDate), new Date()) : -1
+  filter.value ? differenceInDays(new Date(filter.value.expirationDate), new Date()) + 1 : -1
 );
 
 const getLightColor = () => {

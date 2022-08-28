@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
-import { NGrid, NGridItem } from 'naive-ui';
+import { NGrid, NGi } from 'naive-ui';
 import type { Category } from '@/types/models';
 import CategoryCard from './components/CategoryCard.vue';
 import { useI18n } from 'vue-i18n';
@@ -26,9 +26,9 @@ axios('/categories', {
 <template>
   <h1>{{ t('filters.name') }}</h1>
 
-  <n-grid x-gap="12" :cols="4" item-responsive>
-    <n-grid-item v-for="category in categories" :key="category.id">
+  <n-grid x-gap="12" y-gap="12" cols="1 s:2 m:3 l:4 xl:5 2xl:8" responsive="screen">
+    <n-gi v-for="category in categories" :key="category.id">
       <category-card :category="category" />
-    </n-grid-item>
+    </n-gi>
   </n-grid>
 </template>
