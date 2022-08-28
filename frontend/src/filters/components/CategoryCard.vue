@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Category, Filter } from '@/types/models';
-import { ref, type PropType } from 'vue';
+import { computed, ref, type PropType } from 'vue';
 import { NSpace, NCard, NButton, NIcon, NTime, NImage, NPopconfirm, NSpin, useMessage } from 'naive-ui';
 import { DotMark, Renew, TrashCan } from '@vicons/carbon';
 import { getImageUrl } from '../../helpers/helpers';
@@ -20,19 +20,21 @@ const props = defineProps({
 
 const filter = ref<Filter | undefined>(props.category.filters![0]);
 const loading = ref(false);
-const daysBeforeExpire = filter.value ? differenceInDays(new Date(filter.value.expirationDate), new Date()) : -1;
+const daysBeforeExpire = computed(() =>
+  filter.value ? differenceInDays(new Date(filter.value.expirationDate), new Date()) : -1
+);
 
 const getLightColor = () => {
   if (!filter.value) return 'grey';
 
   switch (true) {
-    case daysBeforeExpire >= 3:
+    case daysBeforeExpire.value >= 3:
       return 'green';
 
-    case daysBeforeExpire < 3 && daysBeforeExpire > 0:
+    case daysBeforeExpire.value < 3 && daysBeforeExpire.value > 0:
       return 'yellow';
 
-    case daysBeforeExpire <= 0:
+    case daysBeforeExpire.value <= 0:
       return 'red';
   }
 };
@@ -66,7 +68,6 @@ const renewFilter = async () => {
     })
     .then(({ data }) => {
       message.success('ok!');
-      console.log(data);
       filter.value = data;
     })
     .catch((error) => {

@@ -26,7 +26,7 @@ axios('/categories', {
 <template>
   <h1>{{ t('filters.name') }}</h1>
 
-  <n-grid x-gap="12" :cols="4">
+  <n-grid x-gap="12" :cols="4" item-responsive>
     <n-grid-item v-for="category in categories" :key="category.id">
       <category-card :category="category" />
     </n-grid-item>
