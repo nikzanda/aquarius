@@ -42,8 +42,8 @@ const removeFilter = () => {
 
   loading.value = true;
 
-  axios
-    .patch(`/filters/${filter.value.id}`)
+  return axios
+    .delete(`/filters/${filter.value.id}`)
     .then(() => {
       message.success('ok!');
       filter.value = undefined;
@@ -55,10 +55,12 @@ const removeFilter = () => {
     .finally(() => (loading.value = false));
 };
 
-const renewFilter = () => {
+const renewFilter = async () => {
   loading.value = true;
 
-  axios
+  if (filter.value) await removeFilter();
+
+  return axios
     .post<Filter>('/filters', {
       categoryId: props.category.id,
     })

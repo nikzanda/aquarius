@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import { addDays } from 'date-fns';
-import { TypedRequestQuery } from '../types/commons';
-import { FilterQuery } from '../types/filter';
+import { TypedRequestBody, TypedRequestQuery } from '../types/commons';
+import { FilterBody, FilterQuery } from '../types/filter';
 
 const { filter: filterDB, category: categoryDB } = new PrismaClient();
 
@@ -32,8 +32,7 @@ export const findOne = async (req: Request, res: Response) => {
   res.json(filter);
 };
 
-// TODO: tipizzare il body
-export const create = async (req: Request, res: Response) => {
+export const create = async (req: TypedRequestBody<FilterBody>, res: Response) => {
   const { categoryId } = req.body;
 
   const category = await categoryDB.findUnique({

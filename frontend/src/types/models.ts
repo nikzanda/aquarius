@@ -17,10 +17,8 @@ export type Category = {
  */
 export type Filter = {
   id: number;
-  isActive: boolean;
   expirationDate: Date;
   createdAt: Date;
-  updatedAt: Date;
   categoryId: number;
   category?: Category;
 };
