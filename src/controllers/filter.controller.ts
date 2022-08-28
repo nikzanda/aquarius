@@ -7,28 +7,28 @@ import { FilterQuery } from '../types/filter';
 const { filter: filterDB, category: categoryDB } = new PrismaClient();
 
 export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: Response) => {
-  const { skip, take, categoryId, isActive } = req.query;
+  const { skip, take, categoryId } = req.query;
 
   const filters = await filterDB.findMany({
     skip: +skip,
     ...(+take > 0 && { take: +take }),
     where: {
       ...(categoryId && { categoryId: +categoryId }),
-      ...(isActive && { isActive: ['true', '1'].includes(isActive) }),
     },
   });
 
   res.json(filters);
 };
 
-// TODO: tipizzare params
 export const findOne = async (req: Request, res: Response) => {
   const { id } = req.params;
+
   const filter = await filterDB.findUnique({
     where: {
       id: +id,
     },
   });
+
   res.json(filter);
 };
 
@@ -55,44 +55,27 @@ export const create = async (req: Request, res: Response) => {
     },
   });
 
-  await filterDB.updateMany({
-    where: {
-      categoryId,
-      isActive: true,
-      id: {
-        not: newFilter.id,
-      },
-    },
-    data: {
-      isActive: false,
-    },
-  });
-
   res.status(201).json(newFilter);
 };
 
-// TODO: tipizzare il body
-export const update = async (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const exists = await filterDB.count({
+  const filter = await filterDB.findUnique({
     where: {
       id: +id,
     },
   });
 
-  if (!exists) {
+  if (!filter) {
     return res.sendStatus(404);
   }
 
-  const updatedFilter = await filterDB.update({
+  await filterDB.delete({
     where: {
       id: +id,
     },
-    data: {
-      isActive: false,
-    },
   });
 
-  res.status(200).json(updatedFilter);
+  res.sendStatus(204);
 };

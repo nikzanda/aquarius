@@ -17,13 +17,7 @@ export const findAll = async (req: TypedRequestQuery<CategoryQuery>, res: Respon
     },
     ...(include && {
       include: {
-        ...(include.includes('filters') && {
-          filters: {
-            where: {
-              isActive: true,
-            },
-          },
-        }),
+        filters: true,
       },
     }),
   });

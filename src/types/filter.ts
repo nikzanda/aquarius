@@ -1,6 +1,5 @@
-import { QueryBooleanType, QueryPagination } from './commons';
+import { QueryPagination } from './commons';
 
 export type FilterQuery = QueryPagination & {
   categoryId?: string;
-  isActive?: QueryBooleanType;
 };

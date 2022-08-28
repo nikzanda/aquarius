@@ -19,6 +19,6 @@ router
   )
   .post([body('categoryId').toInt()], validate, filterController.create);
 
-router.route('/:id').get(filterController.findOne).patch(filterController.update);
+router.route('/:id').get(filterController.findOne).delete(filterController.remove);
 
 export default router;

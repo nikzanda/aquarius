@@ -26,10 +26,8 @@ model Category {
 model Filter {
   id             Int      @id @default(autoincrement())
   categoryId     Int
-  isActive       Boolean  @default(true)
   expirationDate DateTime
   createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
 
   category Category @relation(fields: [categoryId], references: [id])
 
