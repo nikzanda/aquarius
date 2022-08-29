@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import { addDays } from 'date-fns';
-import { TypedRequestBody, TypedRequestQuery } from '../types/commons';
+import { QueryParamId, TypedRequestBody, TypedRequestQuery } from '../types/commons';
 import { FilterBody, FilterQuery } from '../types/filter';
 
 const { filter: filterDB, category: categoryDB } = new PrismaClient();
@@ -20,7 +20,7 @@ export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: Response
   res.json(filters);
 };
 
-export const findOne = async (req: Request, res: Response) => {
+export const findOne = async (req: Request<QueryParamId>, res: Response) => {
   const { id } = req.params;
 
   const filter = await filterDB.findUnique({
@@ -57,7 +57,7 @@ export const create = async (req: TypedRequestBody<FilterBody>, res: Response) =
   res.status(201).json(newFilter);
 };
 
-export const remove = async (req: Request, res: Response) => {
+export const remove = async (req: Request<QueryParamId>, res: Response) => {
   const { id } = req.params;
 
   const filter = await filterDB.findUnique({

@@ -6,6 +6,10 @@ export type QueryPagination = {
   take: string;
 };
 
+export type QueryParamId = {
+  id: string;
+}
+
 export type QueryBooleanType = 'true' | '1' | 'false' | '0';
 
 export interface TypedRequestQuery<T extends Query> extends Request {

@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import { CategoryQuery } from '../types/category';
-import { TypedRequestQuery } from '../types/commons';
+import { QueryParamId, TypedRequestQuery } from '../types/commons';
 
 const { category: categoryDB } = new PrismaClient();
 
@@ -28,7 +28,7 @@ export const findAll = async (req: TypedRequestQuery<CategoryQuery>, res: Respon
   res.json(categories);
 };
 
-export const findOne = async (req: Request, res: Response) => {
+export const findOne = async (req: Request<QueryParamId>, res: Response) => {
   const { id } = req.params;
   const category = await categoryDB.findUnique({
     where: {
