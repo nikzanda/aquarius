@@ -5,6 +5,7 @@
     "expiresIn": "Scade tra",
     "days": "giorni",
     "sureToRemove": "Sei sicuro di voler rimuovere il filtro?",
-    "sureToRenew": "Sei sicuro di voler inserire un nuovo filtro?"
+    "sureToRenew": "Sei sicuro di voler inserire un nuovo filtro?",
+    "expired": "Scaduto"
   }
 }

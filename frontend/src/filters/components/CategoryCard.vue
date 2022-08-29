@@ -124,8 +124,11 @@ const renewFilter = async () => {
               <n-time :time="new Date(filter.createdAt)" format="dd/MM/yyyy" />
             </n-descriptions-item>
             <n-descriptions-item :label="t('filters.expiresIn')">
-              <n-number-animation :from="category.durationDays" :to="daysBeforeExpire" />
-              {{ t('filters.days') }}
+              <span v-if="daysBeforeExpire > 0" :style="{ color: daysBeforeExpire <= 3 ? 'yellow' : '' }">
+                <n-number-animation :from="category.durationDays" :to="daysBeforeExpire" />
+                {{ t('filters.days') }}
+              </span>
+              <span v-else style="color: red"> {{ t('filters.expired') }}! </span>
             </n-descriptions-item>
           </n-descriptions>
         </n-gi>
