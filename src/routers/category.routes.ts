@@ -13,6 +13,8 @@ router.get(
     query('name').isString().optional(),
     query('optional').isBoolean().optional(),
     query('include').isIn(['filters']).optional(),
+    query('sortByAsc').toArray(),
+    query('sortByDesc').toArray(),
   ],
   validate,
   categoryController.findAll

@@ -6,7 +6,7 @@ import { TypedRequestQuery } from '../types/commons';
 const { category: categoryDB } = new PrismaClient();
 
 export const findAll = async (req: TypedRequestQuery<CategoryQuery>, res: Response) => {
-  const { skip, take, name, optional, include } = req.query;
+  const { skip, take, name, optional, include, sortByAsc, sortByDesc } = req.query;
 
   const categories = await categoryDB.findMany({
     skip: +skip,
@@ -15,6 +15,10 @@ export const findAll = async (req: TypedRequestQuery<CategoryQuery>, res: Respon
       ...(name && { name: { search: name } }),
       ...(optional && { optional: ['true', '1'].includes(optional) }),
     },
+    orderBy: [
+      ...(sortByAsc?.length ? sortByAsc.map((field) => ({ [field]: 'asc' })) : []),
+      ...(sortByDesc?.length ? sortByDesc.map((field) => ({ [field]: 'desc' })) : []),
+    ],
     ...(include && {
       include: {
         filters: true,
