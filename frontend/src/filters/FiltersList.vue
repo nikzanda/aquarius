@@ -17,7 +17,7 @@ axios('/categories', {
     skip: 0,
     take: 0,
     include: 'filters',
-    sortByAsc: 'name'
+    sortByAsc: 'name',
   },
 })
   .then(({ data }) => categories.push(...data))
