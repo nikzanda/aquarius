@@ -33,3 +33,31 @@ model Filter {
 
   @@map("filters")
 }
+
+model Refill {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  products ProductsOnRefills[]
+
+  @@map("refills")
+}
+
+model Product {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+
+  refills ProductsOnRefills[]
+}
+
+model ProductsOnRefills {
+  refillId  Int
+  productId Int
+  createdAt DateTime @default(now())
+
+  refill  Refill  @relation(fields: [refillId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@id([refillId, productId])
+}

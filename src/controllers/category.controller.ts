@@ -34,6 +34,7 @@ export const findOne = async (req: Request<QueryParamId>, res: Response) => {
     where: {
       id: +id,
     },
+    // TODO: aggiungere include
   });
   res.json(category);
 };

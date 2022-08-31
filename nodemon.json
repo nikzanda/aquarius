@@ -1,4 +1,4 @@
 {
   "ignore": [".git", "node_modules", "dist", "frontend", "documents"],
-  "watch": ["index.ts", "./src"]
+  "watch": ["./src"]
 }
