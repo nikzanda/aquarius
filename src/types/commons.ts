@@ -8,7 +8,7 @@ export type QueryPagination = {
 
 export type QueryParamId = {
   id: string;
-}
+};
 
 export type QueryBooleanType = 'true' | '1' | 'false' | '0';
 

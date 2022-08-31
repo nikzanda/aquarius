@@ -1,15 +1,15 @@
 {
   "name": "aquarius",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "main.js",
   "repository": "https://github.com/nikzanda/aquarius.git",
   "author": "Nicolò Zandarin <nikzanda@hotmail.it>",
   "license": "MIT",
   "scripts": {
     "migrate": "npx prisma migrate dev",
     "build": "npx tsc",
-    "start": "node dist/index.js",
-    "dev": "nodemon index.ts",
+    "start": "node dist/main.js",
+    "dev": "nodemon ./src/main.ts",
     "lint": "npx eslint --fix .",
     "prettify": "npx prettier --write ."
   },
