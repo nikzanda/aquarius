@@ -12,6 +12,11 @@ const router = createRouter({
       name: 'filters',
       component: () => import('../filters/FiltersList.vue'),
     },
+    {
+      path: '/refills',
+      name: 'refills',
+      component: () => import('../refills/RefillsList.vue'),
+    },
   ],
 });
 

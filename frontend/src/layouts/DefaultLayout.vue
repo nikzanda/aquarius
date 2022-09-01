@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-import { NLayout, NLayoutHeader, NLayoutContent, NMenu, type MenuOption, NIcon, NSwitch } from 'naive-ui';
+import { NLayout, NLayoutHeader, NLayoutContent, NMenu, type MenuOption, NIcon, NSwitch, NSpace } from 'naive-ui';
 import { h, ref, type Component } from 'vue';
-import { Filter, Sun, Moon } from '@vicons/carbon';
+import { Filter, Sun, Moon, RainDrop } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
 import type { Theme } from '@/types/types';
 import { useThemeStore } from '@/stores/theme';
@@ -26,6 +26,20 @@ const menuOptions: MenuOption[] = [
     key: 'filters',
     icon: renderIcon(Filter),
   },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'refills',
+          },
+        },
+        { default: t('refills.name') }
+      ),
+    key: 'refills',
+    icon: renderIcon(RainDrop),
+  },
 ];
 
 const activeKey = ref<string | null>(null);
@@ -35,24 +49,26 @@ const themeStore = useThemeStore();
 <template>
   <n-layout style="min-height: 100vh">
     <n-layout-header bordered>
-      <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
-      <n-switch
-        :value="themeStore.theme"
-        checked-value="dark"
-        unchecked-value="light"
-        @update:value="(theme: Theme) => themeStore.setTheme(theme)"
-      >
-        <template #checked-icon>
-          <n-icon>
-            <moon />
-          </n-icon>
-        </template>
-        <template #unchecked-icon>
-          <n-icon>
-            <sun />
-          </n-icon>
-        </template>
-      </n-switch>
+      <n-space justify="space-between" align="center">
+        <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
+        <n-switch
+          :value="themeStore.theme"
+          checked-value="dark"
+          unchecked-value="light"
+          @update:value="(theme: Theme) => themeStore.setTheme(theme)"
+        >
+          <template #checked-icon>
+            <n-icon>
+              <moon />
+            </n-icon>
+          </template>
+          <template #unchecked-icon>
+            <n-icon>
+              <sun />
+            </n-icon>
+          </template>
+        </n-switch>
+      </n-space>
     </n-layout-header>
     <n-layout-content content-style="padding: 15px;" :native-scrollbar="false">
       <router-view />

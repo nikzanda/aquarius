@@ -7,7 +7,11 @@ const router = Router();
 
 router
   .route('')
-  .get([query('skip').isInt(), query('take').isInt()], validate, refillController.findAll)
+  .get(
+    [query('skip').isInt(), query('take').isInt(), query('sortByAsc').toArray(), query('sortByDesc').toArray()],
+    validate,
+    refillController.findAll
+  )
   .post([body('productsIds').isArray().optional(), validate, refillController.create]);
 
 router.route('/:id').get(refillController.findOne);
