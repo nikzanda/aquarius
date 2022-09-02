@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-import { NLayout, NLayoutHeader, NLayoutContent, NMenu, type MenuOption, NIcon, NSwitch, NSpace } from 'naive-ui';
+import { NLayout, NLayoutHeader, NLayoutContent, NMenu, type MenuOption, NIcon, NSwitch, NSpace, NImage } from 'naive-ui';
 import { h, ref, type Component } from 'vue';
 import { Filter, Sun, Moon, RainDrop } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
 import type { Theme } from '@/types/types';
 import { useThemeStore } from '@/stores/theme';
+import { getImageUrl } from '@/helpers/helpers';
 
 const { t } = useI18n();
 
@@ -50,6 +51,7 @@ const themeStore = useThemeStore();
   <n-layout style="min-height: 100vh">
     <n-layout-header bordered>
       <n-space justify="space-between" align="center">
+        <!-- <n-image width="50" height="40" :src="getImageUrl('aquarius')" /> -->
         <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
         <n-switch
           :value="themeStore.theme"
