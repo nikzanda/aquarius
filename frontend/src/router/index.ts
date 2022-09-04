@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { RouterView } from 'vue-router';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,13 +10,41 @@ const router = createRouter({
     },
     {
       path: '/filters',
-      name: 'filters',
-      component: () => import('../filters/FiltersList.vue'),
+      component: () => RouterView,
+      children: [
+        {
+          path: '',
+          name: 'filters',
+          component: () => import('../filters/FiltersList.vue'),
+        },
+      ],
+    },
+    {
+      path: '/products',
+      component: () => RouterView,
+      children: [
+        {
+          path: '',
+          name: 'products',
+          component: () => import('../products/ProductsList.vue'),
+        },
+        {
+          path: 'create',
+          name: 'products.create',
+          component: () => import('../products/ProductCreate.vue'),
+        },
+      ],
     },
     {
       path: '/refills',
-      name: 'refills',
-      component: () => import('../refills/RefillsList.vue'),
+      component: () => RouterView,
+      children: [
+        {
+          path: '',
+          name: 'refills',
+          component: () => import('../refills/RefillsList.vue'),
+        },
+      ],
     },
   ],
 });

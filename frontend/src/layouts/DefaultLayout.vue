@@ -1,8 +1,18 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-import { NLayout, NLayoutHeader, NLayoutContent, NMenu, type MenuOption, NIcon, NSwitch, NSpace } from 'naive-ui';
+import {
+  NLayout,
+  NLayoutHeader,
+  NLayoutContent,
+  NMenu,
+  type MenuOption,
+  NIcon,
+  NSwitch,
+  NSpace,
+  useMessage,
+} from 'naive-ui';
 import { h, ref, type Component } from 'vue';
-import { Filter, Sun, Moon, RainDrop } from '@vicons/carbon';
+import { Filter, Sun, Moon, RainDrop, Product } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
 import type { Theme } from '@/types/types';
 import { useThemeStore } from '@/stores/theme';
@@ -32,6 +42,20 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
+            name: 'products',
+          },
+        },
+        { default: t('products.name') }
+      ),
+    key: 'products',
+    icon: renderIcon(Product),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
             name: 'refills',
           },
         },
@@ -44,6 +68,8 @@ const menuOptions: MenuOption[] = [
 
 const activeKey = ref<string | null>(null);
 const themeStore = useThemeStore();
+
+window.$message = useMessage();
 </script>
 
 <template>
