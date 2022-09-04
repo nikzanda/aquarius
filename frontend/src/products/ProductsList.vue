@@ -5,6 +5,7 @@ import type { Product } from '@/types/models';
 import { reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { NPageHeader, NH1, NSpace, NButton, NGrid, NGi } from 'naive-ui';
+import ProductCard from './components/ProductCard.vue';
 
 const { t } = useI18n();
 const axios = injectStrict(AxiosKey);
@@ -36,7 +37,9 @@ axios('/products', {
     </template>
   </n-page-header>
 
-  <p>
-    {{products}}
-  </p>
+  <n-grid x-gap="12" y-gap="12" cols="1 s:2 m:3 l:4 xl:4 2xl:8" responsive="screen">
+    <n-gi v-for="product in products" :key="product.id">
+      <product-card :product="product" />
+    </n-gi>
+  </n-grid>
 </template>

@@ -75,7 +75,7 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <n-page-header>
+  <n-page-header @back="() => $router.go(-1)">
     <template #title>
       <n-h1>{{ t('products.createPage.title') }}</n-h1>
     </template>
