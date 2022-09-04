@@ -22,7 +22,7 @@ export const findAll = async (req: TypedRequestQuery<CategoryQuery>, res: TypedR
         ...(sortByDesc?.length ? sortByDesc.map((field) => ({ [field]: 'desc' })) : []),
       ],
       ...(include && {
-        include: Object.fromEntries(include.map(inc => [inc, true])),
+        include: Object.fromEntries(include.map((inc) => [inc, true])),
       }),
       where,
     }),
@@ -44,7 +44,7 @@ export const findOne = async (req: Request<QueryParamId, unknown, unknown, { inc
       id: +id,
     },
     ...(include && {
-      include: Object.fromEntries(include.map(inc => [inc, true])),
+      include: Object.fromEntries(include.map((inc) => [inc, true])),
     }),
   });
   res.json(category);

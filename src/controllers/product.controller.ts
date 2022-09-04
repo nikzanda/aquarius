@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Product } from '@prisma/client';
 import { Request, Response } from 'express';
 import { FindAllResponse, QueryParamId, TypedRequestBody, TypedRequestQuery, TypedResponse } from '../types/commons';
-import { ProductBody, ProductQuery } from '../types/product';
+import { ProductCreateBody, ProductQuery, ProductUpdateBody } from '../types/product';
 
 const { product: productDB } = new PrismaClient();
 
@@ -43,21 +43,44 @@ export const findOne = async (req: Request<QueryParamId>, res: Response) => {
   res.json(product);
 };
 
-export const create = async (req: TypedRequestBody<ProductBody>, res: Response) => {
-  const { name } = req.body;
+export const create = async (req: TypedRequestBody<ProductCreateBody>, res: Response<Product>) => {
+  const { name, category, useWhenRefilling, frequencyInDays, quantity } = req.body;
 
   const newProduct = await productDB.create({
     data: {
       name,
-      category: 'PLANT',
-      useWhenRefilling: false,
+      category,
+      useWhenRefilling,
+      frequencyInDays,
+      quantity,
     },
   });
 
   res.status(201).json(newProduct);
 };
 
-// TODO: update
+export const update = async (
+  req: Request<QueryParamId, unknown, ProductUpdateBody, unknown>,
+  res: Response<Product>
+) => {
+  const { id } = req.params;
+  const { name, category, useWhenRefilling, frequencyInDays, quantity } = req.body;
+
+  const updatedProduct = await productDB.update({
+    where: {
+      id: +id,
+    },
+    data: {
+      ...(name && { name }),
+      ...(category && { category }),
+      ...(useWhenRefilling && { useWhenRefilling }),
+      ...(frequencyInDays && { frequencyInDays }),
+      ...(quantity && { quantity }),
+    },
+  });
+
+  res.status(200).json(updatedProduct);
+};
 
 export const remove = async (req: Request<QueryParamId>, res: Response) => {
   const { id } = req.params;

@@ -8,13 +8,7 @@ const router = Router();
 
 router
   .route('')
-  .get(
-    [
-      ...commonsValidations,
-      query('name').isString().optional()],
-    validate,
-    productController.findAll
-  )
+  .get([...commonsValidations, query('name').isString().optional()], validate, productController.findAll)
   .post([body('categoryId').toInt()], validate, productController.create);
 
 router.route('/:id').get(productController.findOne);

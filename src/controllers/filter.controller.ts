@@ -19,7 +19,7 @@ export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: TypedRes
       ...(+take > 0 && { take: +take }),
       where,
       ...(include && {
-        include: Object.fromEntries(include.map(inc => [inc, true])),
+        include: Object.fromEntries(include.map((inc) => [inc, true])),
       }),
     }),
     filterDB.count({ where }),
@@ -40,7 +40,7 @@ export const findOne = async (req: Request<QueryParamId, unknown, unknown, { inc
       id: +id,
     },
     ...(include && {
-      include: Object.fromEntries(include.map(inc => [inc, true])),
+      include: Object.fromEntries(include.map((inc) => [inc, true])),
     }),
   });
 

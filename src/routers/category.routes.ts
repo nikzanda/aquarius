@@ -9,12 +9,7 @@ const checkInclude = query('include').toArray().isIn(['filters']).optional();
 
 router.get(
   '',
-  [
-    ...commonsValidations,
-    query('name').isString().optional(),
-    query('optional').isBoolean().optional(),
-    checkInclude
-  ],
+  [...commonsValidations, query('name').isString().optional(), query('optional').isBoolean().optional(), checkInclude],
   validate,
   categoryController.findAll
 );

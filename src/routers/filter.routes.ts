@@ -14,7 +14,7 @@ router
       ...commonsValidations,
       query('categoryId').isInt().optional(),
       query('isActive').isBoolean().optional(),
-      checkInclude
+      checkInclude,
     ],
     validate,
     filterController.findAll
