@@ -12,6 +12,7 @@ router
   .get([...commonsValidations, checkInclude], validate, refillController.findAll)
   .post([body('productsIds').isArray().optional(), validate, refillController.create]);
 
+router.get('/last', refillController.findLast);
 router.route('/:id').get([checkInclude], validate, refillController.findOne);
 
 export default router;

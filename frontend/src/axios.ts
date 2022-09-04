@@ -10,7 +10,11 @@ apiClient.interceptors.response.use(
     console.error(error);
 
     const { data: { errors = [] } = {} } = error.response;
-    errors.forEach((message) => window.$message.error(message));
+    if (errors?.length) {
+      errors.forEach((message: string) => window.$message.error(message));
+    } else {
+      window.$message.error('errore');
+    }
 
     return error;
   }

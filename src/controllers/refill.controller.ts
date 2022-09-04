@@ -40,8 +40,25 @@ export const findOne = async (req: Request<QueryParamId>, res: Response) => {
     where: {
       id: +id,
     },
+    include: {
+      products: {
+        include: {
+          product: true
+        }
+      }
+    }
   });
   res.json(refill);
+};
+
+export const findLast = async (req: Request, res: Response) => {
+  const lastRefill = await refillDB.findFirst({
+    orderBy: {
+      createdAt: 'desc'
+    },
+  });
+
+  res.json(lastRefill);
 };
 
 export const create = async (req: TypedRequestBody<RefillBody>, res: Response) => {
