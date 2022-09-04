@@ -2,13 +2,16 @@ import { Router } from 'express';
 import { query, body } from 'express-validator';
 import { validate } from '../middlewares/middlewares';
 import * as productController from '../controllers/product.controller';
+import { commonsValidations } from '../helpers/queryValidations';
 
 const router = Router();
 
 router
   .route('')
   .get(
-    [query('skip').isInt(), query('take').isInt(), query('name').isString().optional()],
+    [
+      ...commonsValidations,
+      query('name').isString().optional()],
     validate,
     productController.findAll
   )

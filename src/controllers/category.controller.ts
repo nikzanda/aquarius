@@ -22,9 +22,7 @@ export const findAll = async (req: TypedRequestQuery<CategoryQuery>, res: TypedR
         ...(sortByDesc?.length ? sortByDesc.map((field) => ({ [field]: 'desc' })) : []),
       ],
       ...(include && {
-        include: {
-          filters: true,
-        },
+        include: Object.fromEntries(include.map(inc => [inc, true])),
       }),
       where,
     }),
@@ -37,13 +35,17 @@ export const findAll = async (req: TypedRequestQuery<CategoryQuery>, res: TypedR
   });
 };
 
-export const findOne = async (req: Request<QueryParamId>, res: Response) => {
+export const findOne = async (req: Request<QueryParamId, unknown, unknown, { include: string[] }>, res: Response) => {
   const { id } = req.params;
+  const { include } = req.query;
+
   const category = await categoryDB.findUnique({
     where: {
       id: +id,
     },
-    // TODO: aggiungere include
+    ...(include && {
+      include: Object.fromEntries(include.map(inc => [inc, true])),
+    }),
   });
   res.json(category);
 };

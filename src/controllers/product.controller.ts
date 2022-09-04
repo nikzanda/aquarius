@@ -49,6 +49,8 @@ export const create = async (req: TypedRequestBody<ProductBody>, res: Response) 
   const newProduct = await productDB.create({
     data: {
       name,
+      category: 'PLANT',
+      useWhenRefilling: false,
     },
   });
 
