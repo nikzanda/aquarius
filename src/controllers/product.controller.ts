@@ -1,26 +1,34 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
-import { QueryParamId, TypedRequestBody, TypedRequestQuery } from '../types/commons';
+import { FindAllResponse, QueryParamId, TypedRequestBody, TypedRequestQuery, TypedResponse } from '../types/commons';
 import { ProductBody, ProductQuery } from '../types/product';
 
 const { product: productDB } = new PrismaClient();
 
-export const findAll = async (req: TypedRequestQuery<ProductQuery>, res: Response) => {
+export const findAll = async (req: TypedRequestQuery<ProductQuery>, res: TypedResponse<FindAllResponse>) => {
   const { skip, take, name, sortByAsc, sortByDesc } = req.query;
 
-  const products = await productDB.findMany({
-    skip: +skip,
-    ...(+take > 0 && { take: +take }),
-    where: {
-      ...(name && { name: { search: name } }),
-    },
-    orderBy: [
-      ...(sortByAsc?.length ? sortByAsc.map((field) => ({ [field]: 'asc' })) : []),
-      ...(sortByDesc?.length ? sortByDesc.map((field) => ({ [field]: 'desc' })) : []),
-    ],
-  });
+  const where = {
+    ...(name && { name: { search: name } }),
+  };
 
-  res.json(products);
+  const [result, count] = await Promise.all([
+    productDB.findMany({
+      skip: +skip,
+      ...(+take > 0 && { take: +take }),
+      orderBy: [
+        ...(sortByAsc?.length ? sortByAsc.map((field) => ({ [field]: 'asc' })) : []),
+        ...(sortByDesc?.length ? sortByDesc.map((field) => ({ [field]: 'desc' })) : []),
+      ],
+      where,
+    }),
+    productDB.count({ where }),
+  ]);
+
+  res.json({
+    result,
+    count,
+  });
 };
 
 export const findOne = async (req: Request<QueryParamId>, res: Response) => {

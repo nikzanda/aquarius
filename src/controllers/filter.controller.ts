@@ -1,23 +1,31 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import { addDays } from 'date-fns';
-import { QueryParamId, TypedRequestBody, TypedRequestQuery } from '../types/commons';
+import { FindAllResponse, QueryParamId, TypedRequestBody, TypedRequestQuery, TypedResponse } from '../types/commons';
 import { FilterBody, FilterQuery } from '../types/filter';
 
 const { filter: filterDB, category: categoryDB } = new PrismaClient();
 
-export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: Response) => {
+export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: TypedResponse<FindAllResponse>) => {
   const { skip, take, categoryId } = req.query;
 
-  const filters = await filterDB.findMany({
-    skip: +skip,
-    ...(+take > 0 && { take: +take }),
-    where: {
-      ...(categoryId && { categoryId: +categoryId }),
-    },
-  });
+  const where = {
+    ...(categoryId && { categoryId: +categoryId }),
+  };
 
-  res.json(filters);
+  const [result, count] = await Promise.all([
+    filterDB.findMany({
+      skip: +skip,
+      ...(+take > 0 && { take: +take }),
+      where,
+    }),
+    filterDB.count({ where }),
+  ]);
+
+  res.json({
+    result,
+    count,
+  });
 };
 
 export const findOne = async (req: Request<QueryParamId>, res: Response) => {

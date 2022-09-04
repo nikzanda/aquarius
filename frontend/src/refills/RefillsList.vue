@@ -49,7 +49,7 @@ axios('/refills', {
     sortByDesc: 'createdAt',
   },
 })
-  .then(({ data }) => refills.push(...data))
+  .then(({ data: { result } }) => refills.push(...result))
   .catch(console.error); // TODO: gestire errore globalmente
 </script>
 

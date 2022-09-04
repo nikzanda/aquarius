@@ -20,7 +20,7 @@ axios('/categories', {
     sortByAsc: 'name',
   },
 })
-  .then(({ data }) => categories.push(...data))
+  .then(({ data: { result } }) => categories.push(...result))
   .catch(console.error);
 </script>
 
