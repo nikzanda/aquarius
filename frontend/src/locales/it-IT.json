@@ -1,4 +1,12 @@
 {
+  "commons": {
+    "create": "Crea",
+    "actions": "Azioni",
+    "quantity": "Quantità"
+  },
+  "validations": {
+    "required": "Campo obbligatorio"
+  },
   "filters": {
     "name": "Filtri",
     "insertedAt": "Inserito il",
@@ -7,5 +15,23 @@
     "sureToRemove": "Sei sicuro di voler rimuovere il filtro?",
     "sureToRenew": "Sei sicuro di voler inserire un nuovo filtro?",
     "expired": "Scaduto"
+  },
+  "products": {
+    "name": "Prodotti",
+    "createPage": {
+      "title": "Crea nuovo prodotto"
+    },
+    "form": {
+      "name": "Nome",
+      "category": "Categoria",
+      "quantity": "Quantità",
+      "useWhenRefilling": "Da utilizzare al cambio dell'acqua",
+      "frequencyInDays": "Frequenza (giorni)"
+    },
+    "frequency": "Frequenza",
+    "usedOn": "Utilizzato il",
+    "useIn": "Prossimo utilizzo",
+    "everyRefill": "Ad ogni cambio dell'acqua",
+    "everyDaysFrequency": "Ogni {days} giorni"
   }
 }

@@ -36,7 +36,7 @@ const productType = props.product.category as unknown as string;
           {{ t('products.everyDaysFrequency', { days: product.frequencyInDays }) }}
         </span>
       </n-descriptions-item>
-      <n-descriptions-item :label="t('products.quantity')">
+      <n-descriptions-item :label="t('commons.quantity')">
         {{ product.quantity }}
       </n-descriptions-item>
       <n-descriptions-item v-if="product.useWhenRefilling" :label="t('products.usedOn')">

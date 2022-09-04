@@ -45,13 +45,13 @@ const rules: FormRules = {
   name: [
     {
       required: true,
-      message: t('commons.required'),
+      message: t('validations.required'),
     },
   ],
   category: [
     {
       required: true,
-      message: t('commons.required'),
+      message: t('validations.required'),
     },
   ],
 };

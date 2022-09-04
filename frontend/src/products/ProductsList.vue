@@ -31,7 +31,7 @@ axios('/products', {
     <template #extra>
       <n-space>
         <n-button tertiary type="primary" @click="$router.push({ name: 'products.create' })">
-          {{ t('products.create') }}
+          {{ t('commons.create') }}
         </n-button>
       </n-space>
     </template>
