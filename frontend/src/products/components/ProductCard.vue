@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { Product } from '@/types/models';
-import { NSpace, NCard, NIcon, NH3, NDescriptions, NDescriptionsItem, NPopconfirm, NButton } from 'naive-ui';
-import { ref, type PropType } from 'vue';
+import { NSpace, NCard, NIcon, NH3, NDescriptions, NDescriptionsItem, NPopconfirm, NButton, useMessage, NTime } from 'naive-ui';
+import { computed, ref, type PropType } from 'vue';
 import { RainDrop, Sprout, SoilMoistureField, Edit } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
 import { useRefillStore } from '@/stores/refill';
+import { addDays, differenceInDays } from 'date-fns';
 
 const props = defineProps({
   product: {
@@ -17,16 +18,28 @@ const { t } = useI18n();
 const productType = props.product.category as unknown as string;
 const loadingUseProduct = ref(false);
 const refillStore = useRefillStore();
+const message = useMessage()
+const lastUse = computed(() =>
+   refillStore.lastRefill?.products.filter(({ productId }) => productId === props.product.id)[0]
+);
+const remainingDays = computed(() => {
+  if (props.product.useWhenRefilling || !lastUse.value) {
+    return -1
+  }
+
+  const differenceDays = differenceInDays(Date.now(), new Date(lastUse.value.createdAt))
+  return   props.product.frequencyInDays! - differenceDays;
+});
 
 const handleUseProduct = () => {
   loadingUseProduct.value = true;
 
   refillStore
     .updateLastRefill({ productId: props.product.id })
-    .then(() => {
-      alert('ok');
-    })
-    .catch(() => alert('no'))
+    .then(() =>
+      message.success('ok')
+    )
+    .catch(() => message.error('error'))
     .finally(() => (loadingUseProduct.value = false));
 };
 </script>
@@ -54,10 +67,19 @@ const handleUseProduct = () => {
         {{ product.quantity }}
       </n-descriptions-item>
       <n-descriptions-item v-if="product.useWhenRefilling" :label="t('products.usedOn')">
-        <!-- data ultimo inserimento prodotto in refill -->
+        <n-time v-if="lastUse" :time="new Date(lastUse.createdAt)" format="dd/MM/yyyy" />
+        <span v-else :style="{color: 'red'}">{{t('products.notUsedYet')}}</span>
       </n-descriptions-item>
       <n-descriptions-item v-else :label="t('products.useIn')">
-        <!-- utilizzare tra X giorni -->
+        <span v-if="remainingDays > 1" >
+          {{ t('products.nextUse', { days: remainingDays }) }}
+        </span>
+        <span v-else-if="remainingDays === 1" :style="{color: 'yellow'}">
+          {{ t('commons.tomorrow') }}
+        </span>
+        <span v-else :style="{color: 'red'}">
+          {{ t('commons.today') }}
+        </span>
       </n-descriptions-item>
     </n-descriptions>
 

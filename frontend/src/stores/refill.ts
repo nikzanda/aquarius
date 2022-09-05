@@ -29,8 +29,8 @@ export const useRefillStore = defineStore('refill', () => {
     return axios
       .patch(`/refills/${lastRefill.value.id}`, payload)
       .then(({ data }) => {
-        console.log(data);
-        return true;
+        lastRefill.value = data
+        return data;
       })
       .catch(Promise.reject);
   };

@@ -58,6 +58,9 @@ export const findLast = async (req: Request, res: Response) => {
     },
     include: {
       products: {
+        orderBy: {
+          createdAt: 'desc'
+        },
         include: {
           product: true,
         },
@@ -116,6 +119,14 @@ export const update = async (req: Request<QueryParamId, unknown, RefillUpdateBod
   const updatedRefill = await refillDB.update({
     where: {
       id: +id,
+    },
+    include: {
+      // TODO: aggiungere include nella query
+      products: {
+        include: {
+          product: true,
+        },
+      },
     },
     data: {
       products: {
