@@ -13,6 +13,10 @@ router
   .post([body('productsIds').isArray().optional(), validate, refillController.create]);
 
 router.get('/last', refillController.findLast);
-router.route('/:id').get([checkInclude], validate, refillController.findOne);
+
+router
+  .route('/:id')
+  .get([checkInclude], validate, refillController.findOne)
+  .patch([body('productId').isInt()], validate, refillController.update);
 
 export default router;

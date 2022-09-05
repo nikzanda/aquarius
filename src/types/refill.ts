@@ -8,6 +8,10 @@ export type RefillQuery = QueryPagination & {
   sortByDesc?: Sortable[];
 };
 
-export type RefillBody = {
+export type RefillCreateBody = {
   productsIds?: number[];
+};
+
+export type RefillUpdateBody = {
+  productId: number;
 };

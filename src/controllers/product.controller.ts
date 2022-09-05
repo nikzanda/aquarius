@@ -59,10 +59,7 @@ export const create = async (req: TypedRequestBody<ProductCreateBody>, res: Resp
   res.status(201).json(newProduct);
 };
 
-export const update = async (
-  req: Request<QueryParamId, unknown, ProductUpdateBody, unknown>,
-  res: Response<Product>
-) => {
+export const update = async (req: Request<QueryParamId, unknown, ProductUpdateBody>, res: Response<Product>) => {
   const { id } = req.params;
   const { name, category, useWhenRefilling, frequencyInDays, quantity } = req.body;
 
@@ -79,7 +76,7 @@ export const update = async (
     },
   });
 
-  res.status(200).json(updatedProduct);
+  res.json(updatedProduct);
 };
 
 export const remove = async (req: Request<QueryParamId>, res: Response) => {

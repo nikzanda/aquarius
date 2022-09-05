@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import type { Product } from '@/types/models';
 import { NSpace, NCard, NIcon, NH3, NDescriptions, NDescriptionsItem, NPopconfirm, NButton } from 'naive-ui';
-import type { PropType } from 'vue';
+import { ref, type PropType } from 'vue';
 import { RainDrop, Sprout, SoilMoistureField, Edit } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
-
-const { t } = useI18n();
+import { useRefillStore } from '@/stores/refill';
 
 const props = defineProps({
   product: {
@@ -14,7 +13,22 @@ const props = defineProps({
   },
 });
 
+const { t } = useI18n();
 const productType = props.product.category as unknown as string;
+const loadingUseProduct = ref(false);
+const refillStore = useRefillStore();
+
+const handleUseProduct = () => {
+  loadingUseProduct.value = true;
+
+  refillStore
+    .updateLastRefill({ productId: props.product.id })
+    .then(() => {
+      alert('ok');
+    })
+    .catch(() => alert('no'))
+    .finally(() => (loadingUseProduct.value = false));
+};
 </script>
 
 <template>
@@ -49,6 +63,7 @@ const productType = props.product.category as unknown as string;
 
     <template #action>
       <n-space justify="end">
+        <!-- TODO: pagina di modifica @click="() => $router.push({ name: '' })" -->
         <n-button tertiary circle type="info">
           <template #icon>
             <n-icon>
@@ -57,10 +72,9 @@ const productType = props.product.category as unknown as string;
           </template>
         </n-button>
 
-        <n-popconfirm @positive-click="() => {}">
+        <n-popconfirm @positive-click="handleUseProduct">
           <template #trigger>
-            <!-- TODO: pagina di modifica @click="() => $router.push({ name: '' })" -->
-            <n-button tertiary circle type="primary">
+            <n-button tertiary circle type="primary" :loading="loadingUseProduct">
               <template #icon>
                 <n-icon>
                   <soil-moisture-field />

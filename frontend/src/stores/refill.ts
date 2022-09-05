@@ -4,6 +4,10 @@ import { ref } from 'vue';
 import { injectStrict } from '@/helpers/injectTypes';
 import { AxiosKey } from '@/symbols';
 
+interface RefillUpdate {
+  productId: number;
+}
+
 export const useRefillStore = defineStore('refill', () => {
   const axios = injectStrict(AxiosKey);
 
@@ -12,8 +16,22 @@ export const useRefillStore = defineStore('refill', () => {
   const count = ref(0);
 
   const getLastRefill = () => {
-    axios('/refills/last')
+    return axios('/refills/last')
       .then(({ data }) => (lastRefill.value = data))
+      .catch(Promise.reject);
+  };
+
+  const updateLastRefill = (payload: RefillUpdate) => {
+    if (!lastRefill.value) {
+      return Promise.reject('no-refill');
+    }
+
+    return axios
+      .patch(`/refills/${lastRefill.value.id}`, payload)
+      .then(({ data }) => {
+        console.log(data);
+        return true;
+      })
       .catch(Promise.reject);
   };
 
@@ -22,5 +40,6 @@ export const useRefillStore = defineStore('refill', () => {
     refills,
     count,
     getLastRefill,
+    updateLastRefill,
   };
 });
