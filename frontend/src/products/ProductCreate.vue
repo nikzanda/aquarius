@@ -19,8 +19,9 @@ import {
   NSwitch,
   NInputNumber,
 } from 'naive-ui';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 
 interface ProductCreate {
   name: string;
@@ -31,6 +32,7 @@ interface ProductCreate {
 }
 
 const { t } = useI18n();
+const router = useRouter();
 const axios = injectStrict(AxiosKey);
 const sending = ref(false);
 const form = ref<FormInst | null>(null);
@@ -41,20 +43,23 @@ const model = ref<ProductCreate>({
   frequencyInDays: undefined,
   useWhenRefilling: true,
 });
-const rules: FormRules = {
-  name: [
-    {
-      required: true,
-      message: t('validations.required'),
-    },
-  ],
-  category: [
-    {
-      required: true,
-      message: t('validations.required'),
-    },
-  ],
-};
+const rules = computed(
+  () =>
+    ({
+      name: [
+        {
+          required: true,
+          message: t('validations.required'),
+        },
+      ],
+      frequencyInDays: [
+        {
+          required: !model.value.useWhenRefilling,
+          message: t('validations.required'),
+        },
+      ],
+    } as FormRules)
+);
 const productCategoriesOptions = Object.values(ProductCategory).filter((v) => typeof v === 'string') as string[];
 
 const handleSubmit = () => {
@@ -67,8 +72,8 @@ const handleSubmit = () => {
 
     axios
       .post('/products', model.value)
-      .then(() => alert('ok'))
-      .catch(() => alert('no'))
+      .then(() => router.push({ name: 'products.list' }))
+      .catch(() => {})
       .finally(() => (sending.value = false));
   });
 };
@@ -125,7 +130,7 @@ const handleSubmit = () => {
             v-model:value="model.frequencyInDays"
             button-placement="both"
             :placeholder="t('products.form.frequencyInDays')"
-            :min="0"
+            :min="1"
           />
         </n-form-item>
       </n-gi>

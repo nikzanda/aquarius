@@ -15,7 +15,7 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'filters',
+          name: 'filters.list',
           component: () => import('../filters/FiltersList.vue'),
         },
       ],
@@ -26,7 +26,7 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'products',
+          name: 'products.list',
           component: () => import('../products/ProductsList.vue'),
         },
         {
@@ -42,7 +42,7 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'refills',
+          name: 'refills.list',
           component: () => import('../refills/RefillsList.vue'),
         },
       ],

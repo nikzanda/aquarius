@@ -46,17 +46,21 @@ export const findOne = async (req: Request<QueryParamId>, res: Response) => {
 export const create = async (req: TypedRequestBody<ProductCreateBody>, res: Response<Product>) => {
   const { name, category, useWhenRefilling, frequencyInDays, quantity } = req.body;
 
-  const newProduct = await productDB.create({
-    data: {
-      name,
-      category,
-      useWhenRefilling,
-      frequencyInDays,
-      quantity,
-    },
-  });
+  try {
+    const newProduct = await productDB.create({
+      data: {
+        name,
+        category,
+        useWhenRefilling,
+        frequencyInDays,
+        quantity,
+      },
+    });
 
-  res.status(201).json(newProduct);
+    res.status(201).json(newProduct);
+  } catch (error: any) {
+    res.status(400).json(error);
+  }
 };
 
 export const update = async (req: Request<QueryParamId, unknown, ProductUpdateBody>, res: Response<Product>) => {

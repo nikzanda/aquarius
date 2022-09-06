@@ -16,7 +16,7 @@ apiClient.interceptors.response.use(
       window.$message.error('errore');
     }
 
-    return error;
+    return Promise.reject(error);
   }
 );
 

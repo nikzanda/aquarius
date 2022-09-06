@@ -42,7 +42,7 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: 'filters',
+            name: 'filters.list',
           },
         },
         { default: t('filters.name') }
@@ -56,7 +56,7 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: 'products',
+            name: 'products.list',
           },
         },
         { default: t('products.name') }
@@ -70,7 +70,7 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: 'refills',
+            name: 'refills.list',
           },
         },
         { default: t('refills.name') }

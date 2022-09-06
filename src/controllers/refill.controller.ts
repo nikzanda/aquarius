@@ -59,7 +59,7 @@ export const findLast = async (req: Request, res: Response) => {
     include: {
       products: {
         orderBy: {
-          createdAt: 'desc'
+          createdAt: 'desc',
         },
         include: {
           product: true,
