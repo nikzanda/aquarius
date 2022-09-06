@@ -7,7 +7,7 @@ import { FilterBody, FilterQuery } from '../types/filter';
 const { filter: filterDB, category: categoryDB } = new PrismaClient();
 
 export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: TypedResponse<FindAllResponse>) => {
-  const { skip, take, categoryId } = req.query;
+  const { skip, take, categoryId, include } = req.query;
 
   const where = {
     ...(categoryId && { categoryId: +categoryId }),
@@ -18,6 +18,9 @@ export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: TypedRes
       skip: +skip,
       ...(+take > 0 && { take: +take }),
       where,
+      ...(include && {
+        include: Object.fromEntries(include.map((inc) => [inc, true])),
+      }),
     }),
     filterDB.count({ where }),
   ]);
@@ -28,13 +31,17 @@ export const findAll = async (req: TypedRequestQuery<FilterQuery>, res: TypedRes
   });
 };
 
-export const findOne = async (req: Request<QueryParamId>, res: Response) => {
+export const findOne = async (req: Request<QueryParamId, unknown, unknown, { include: string[] }>, res: Response) => {
   const { id } = req.params;
+  const { include } = req.query;
 
   const filter = await filterDB.findUnique({
     where: {
       id: +id,
     },
+    ...(include && {
+      include: Object.fromEntries(include.map((inc) => [inc, true])),
+    }),
   });
 
   res.json(filter);

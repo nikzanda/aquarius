@@ -1,8 +1,18 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
-import { NLayout, NLayoutHeader, NLayoutContent, NMenu, type MenuOption, NIcon, NSwitch, NSpace } from 'naive-ui';
+import {
+  NLayout,
+  NLayoutHeader,
+  NLayoutContent,
+  NMenu,
+  type MenuOption,
+  NIcon,
+  NSwitch,
+  NSpace,
+  useMessage,
+} from 'naive-ui';
 import { h, ref, type Component } from 'vue';
-import { Filter, Sun, Moon, RainDrop } from '@vicons/carbon';
+import { Filter, Sun, Moon, RainDrop, Product, Fish } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
 import type { Theme } from '@/types/types';
 import { useThemeStore } from '@/stores/theme';
@@ -18,7 +28,21 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: 'filters',
+            name: 'home',
+          },
+        },
+        { default: t('home') }
+      ),
+    key: 'home',
+    icon: renderIcon(Fish),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'filters.list',
           },
         },
         { default: t('filters.name') }
@@ -32,7 +56,21 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: 'refills',
+            name: 'products.list',
+          },
+        },
+        { default: t('products.name') }
+      ),
+    key: 'products',
+    icon: renderIcon(Product),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'refills.list',
           },
         },
         { default: t('refills.name') }
@@ -44,6 +82,8 @@ const menuOptions: MenuOption[] = [
 
 const activeKey = ref<string | null>(null);
 const themeStore = useThemeStore();
+
+window.$message = useMessage();
 </script>
 
 <template>

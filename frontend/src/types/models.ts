@@ -40,6 +40,10 @@ export type Refill = {
 export type Product = {
   id: number;
   name: string;
+  category: ProductCategory;
+  quantity: string | null;
+  frequencyInDays: number | null;
+  useWhenRefilling: boolean;
   createdAt: string;
   refills: ProductsOnRefills[];
 };
@@ -49,9 +53,18 @@ export type Product = {
  *
  */
 export type ProductsOnRefills = {
+  id: number;
   refillId: number;
   productId: number;
   createdAt: string;
   refill: Refill;
   product: Product;
 };
+
+/**
+ * Enums
+ */
+export enum ProductCategory {
+  WATER,
+  PLANT,
+}

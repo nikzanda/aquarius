@@ -1,7 +1,7 @@
-import { PrismaClient } from '.prisma/client';
+import { PrismaClient, Refill } from '.prisma/client';
 import { Request, Response } from 'express';
 import { FindAllResponse, QueryParamId, TypedRequestBody, TypedRequestQuery, TypedResponse } from '../types/commons';
-import { RefillBody, RefillQuery } from '../types/refill';
+import { RefillCreateBody, RefillQuery, RefillUpdateBody } from '../types/refill';
 
 const { refill: refillDB, product: productDB } = new PrismaClient();
 
@@ -40,11 +40,38 @@ export const findOne = async (req: Request<QueryParamId>, res: Response) => {
     where: {
       id: +id,
     },
+    include: {
+      products: {
+        include: {
+          product: true,
+        },
+      },
+    },
   });
   res.json(refill);
 };
 
-export const create = async (req: TypedRequestBody<RefillBody>, res: Response) => {
+export const findLast = async (req: Request, res: Response) => {
+  const lastRefill = await refillDB.findFirst({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      products: {
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          product: true,
+        },
+      },
+    },
+  });
+
+  res.json(lastRefill);
+};
+
+export const create = async (req: TypedRequestBody<RefillCreateBody>, res: Response<Refill>) => {
   const { productsIds } = req.body;
   const products = [];
 
@@ -75,4 +102,46 @@ export const create = async (req: TypedRequestBody<RefillBody>, res: Response) =
   res.status(201).json(newRefill);
 };
 
-// TODO: update
+export const update = async (req: Request<QueryParamId, unknown, RefillUpdateBody>, res: Response<Refill>) => {
+  const { id } = req.params;
+  const { productId } = req.body;
+
+  const product = await productDB.findUnique({
+    where: {
+      id: productId,
+    },
+  });
+
+  if (!product) {
+    return res.sendStatus(400);
+  }
+
+  const updatedRefill = await refillDB.update({
+    where: {
+      id: +id,
+    },
+    include: {
+      // TODO: aggiungere include nella query
+      products: {
+        include: {
+          product: true,
+        },
+      },
+    },
+    data: {
+      products: {
+        create: [
+          {
+            product: {
+              connect: {
+                id: productId,
+              },
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  res.json(updatedRefill);
+};

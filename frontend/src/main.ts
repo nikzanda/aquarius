@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp, h } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
@@ -7,8 +7,15 @@ import 'vfonts/FiraCode.css';
 import i18n from './i18n';
 import { AxiosKey } from './symbols';
 import apiClient from './axios';
+import { useRefillStore } from '@/stores/refill';
 
-const app = createApp(App);
+const app = createApp({
+  setup() {
+    const refillStore = useRefillStore();
+    refillStore.getLastRefill();
+  },
+  render: () => h(App),
+});
 
 app.use(createPinia());
 app.use(router);

@@ -1,21 +1,56 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { RouterView } from 'vue-router';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      redirect: '/filters',
+      path: '',
+      name: 'home',
+      component: () => import('../home/HomePage.vue'),
     },
     {
       path: '/filters',
-      name: 'filters',
-      component: () => import('../filters/FiltersList.vue'),
+      component: () => RouterView,
+      children: [
+        {
+          path: '',
+          name: 'filters.list',
+          component: () => import('../filters/FiltersList.vue'),
+        },
+      ],
+    },
+    {
+      path: '/products',
+      component: () => RouterView,
+      children: [
+        {
+          path: '',
+          name: 'products.list',
+          component: () => import('../products/ProductsList.vue'),
+        },
+        {
+          path: 'new',
+          name: 'products.create',
+          component: () => import('../products/ProductCreate.vue'),
+        },
+        {
+          path: ':id',
+          name: 'products.update',
+          component: () => import('../products/ProductUpdate.vue'),
+        },
+      ],
     },
     {
       path: '/refills',
-      name: 'refills',
-      component: () => import('../refills/RefillsList.vue'),
+      component: () => RouterView,
+      children: [
+        {
+          path: '',
+          name: 'refills.list',
+          component: () => import('../refills/RefillsList.vue'),
+        },
+      ],
     },
   ],
 });

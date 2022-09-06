@@ -1,11 +1,8 @@
 import express, { Router } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import categoryRouter from './routers/category.routes';
-import filterRouter from './routers/filter.routes';
-import refillRouter from './routers/refill.routes';
-import productRouter from './routers/product.routes';
 import morgan from 'morgan';
+import { categoryRouter, filterRouter, refillRouter, productRouter } from './routers';
 
 dotenv.config();
 

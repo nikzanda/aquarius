@@ -44,20 +44,28 @@ model Refill {
 }
 
 model Product {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
+  id               Int             @id @default(autoincrement())
+  name             String          @unique
+  category         ProductCategory
+  quantity         String?
+  frequencyInDays  Int?
+  useWhenRefilling Boolean
+  createdAt        DateTime        @default(now())
 
   refills ProductsOnRefills[]
 }
 
 model ProductsOnRefills {
+  id        Int      @id @default(autoincrement())
   refillId  Int
   productId Int
   createdAt DateTime @default(now())
 
   refill  Refill  @relation(fields: [refillId], references: [id])
   product Product @relation(fields: [productId], references: [id])
+}
 
-  @@id([refillId, productId])
+enum ProductCategory {
+  WATER
+  PLANT
 }
