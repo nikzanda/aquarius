@@ -31,7 +31,7 @@ router
       body('category').isIn(Object.keys(ProductCategory)).optional(),
       body('quantity').isString().optional(),
       body('frequencyInDays').isInt().optional(), // TODO: required if...
-      body('useWhenRefilling').isBoolean(),
+      body('useWhenRefilling').isBoolean().optional(),
     ],
     validate,
     productController.update

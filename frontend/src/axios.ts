@@ -11,7 +11,7 @@ apiClient.interceptors.response.use(
 
     const { data: { errors = [] } = {} } = error.response;
     if (errors?.length) {
-      errors.forEach((message: string) => window.$message.error(message));
+      errors.forEach(({ msg, param }: any) => window.$message.error(`${param}: ${msg}`));
     } else {
       window.$message.error('errore');
     }

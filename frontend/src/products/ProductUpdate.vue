@@ -22,8 +22,10 @@ axios(`/products/${id}`)
 const handleSubmit = (data: any) => {
   sending.value = true;
 
+  const payload = Object.fromEntries(Object.entries(data).filter(([, value]) => value != null));
+
   axios
-    .patch(`/products/${id}`, data)
+    .patch(`/products/${id}`, payload)
     .then(() => router.push({ name: 'products.list' }))
     .catch(() => {})
     .finally(() => (sending.value = false));

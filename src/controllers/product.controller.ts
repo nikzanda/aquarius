@@ -1,4 +1,4 @@
-import { PrismaClient, Product } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 import { FindAllResponse, QueryParamId, TypedRequestBody, TypedRequestQuery, TypedResponse } from '../types/commons';
 import { ProductCreateBody, ProductQuery, ProductUpdateBody } from '../types/product';
@@ -43,7 +43,7 @@ export const findOne = async (req: Request<QueryParamId>, res: Response) => {
   res.json(product);
 };
 
-export const create = async (req: TypedRequestBody<ProductCreateBody>, res: Response<Product>) => {
+export const create = async (req: TypedRequestBody<ProductCreateBody>, res: Response) => {
   const { name, category, useWhenRefilling, frequencyInDays, quantity } = req.body;
 
   try {
@@ -58,29 +58,33 @@ export const create = async (req: TypedRequestBody<ProductCreateBody>, res: Resp
     });
 
     res.status(201).json(newProduct);
-  } catch (error: any) {
+  } catch (error) {
     res.status(400).json(error);
   }
 };
 
-export const update = async (req: Request<QueryParamId, unknown, ProductUpdateBody>, res: Response<Product>) => {
+export const update = async (req: Request<QueryParamId, unknown, ProductUpdateBody>, res: Response) => {
   const { id } = req.params;
   const { name, category, useWhenRefilling, frequencyInDays, quantity } = req.body;
 
-  const updatedProduct = await productDB.update({
-    where: {
-      id: +id,
-    },
-    data: {
-      ...(name && { name }),
-      ...(category && { category }),
-      ...(useWhenRefilling && { useWhenRefilling }),
-      ...(frequencyInDays && { frequencyInDays }),
-      ...(quantity && { quantity }),
-    },
-  });
+  try {
+    const updatedProduct = await productDB.update({
+      where: {
+        id: +id,
+      },
+      data: {
+        ...(name && { name }),
+        ...(category && { category }),
+        ...(useWhenRefilling && { useWhenRefilling }),
+        ...(frequencyInDays && { frequencyInDays }),
+        ...(quantity && { quantity }),
+      },
+    });
 
-  res.json(updatedProduct);
+    res.json(updatedProduct);
+  } catch (error) {
+    res.status(400).json(error);
+  }
 };
 
 export const remove = async (req: Request<QueryParamId>, res: Response) => {
