@@ -30,9 +30,14 @@ const router = createRouter({
           component: () => import('../products/ProductsList.vue'),
         },
         {
-          path: 'create',
+          path: 'new',
           name: 'products.create',
           component: () => import('../products/ProductCreate.vue'),
+        },
+        {
+          path: ':id',
+          name: 'products.update',
+          component: () => import('../products/ProductUpdate.vue'),
         },
       ],
     },

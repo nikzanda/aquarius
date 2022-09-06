@@ -1,6 +1,7 @@
 {
   "commons": {
     "create": "Crea",
+    "update": "Aggiorna",
     "actions": "Azioni",
     "quantity": "Quantità",
     "today": "Oggi",

@@ -22,6 +22,19 @@ router
     productController.create
   );
 
-router.route('/:id').get(productController.findOne);
+router
+  .route('/:id')
+  .get(productController.findOne)
+  .patch(
+    [
+      body('name').isString().optional(),
+      body('category').isIn(Object.keys(ProductCategory)).optional(),
+      body('quantity').isString().optional(),
+      body('frequencyInDays').isInt().optional(), // TODO: required if...
+      body('useWhenRefilling').isBoolean(),
+    ],
+    validate,
+    productController.update
+  );
 
 export default router;

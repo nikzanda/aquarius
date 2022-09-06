@@ -94,8 +94,12 @@ const handleUseProduct = () => {
 
     <template #action>
       <n-space justify="end">
-        <!-- TODO: pagina di modifica @click="() => $router.push({ name: '' })" -->
-        <n-button tertiary circle type="info">
+        <n-button
+          tertiary
+          circle
+          type="info"
+          @click="() => $router.push({ name: 'products.update', params: { id: product.id } })"
+        >
           <template #icon>
             <n-icon>
               <edit />
