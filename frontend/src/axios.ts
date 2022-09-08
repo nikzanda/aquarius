@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from 'axios';
 
 const apiClient: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:8000/api', // TODO: sostituire con .env
+  baseURL: `${import.meta.env.VITE_BASE_URL}/api`,
 });
 
 apiClient.interceptors.response.use(
