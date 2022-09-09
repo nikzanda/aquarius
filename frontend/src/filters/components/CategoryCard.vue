@@ -97,7 +97,7 @@ const renewFilter = async () => {
 
 <template>
   <n-spin :show="loading">
-    <n-card size="small">
+    <n-card size="small" :style="{ height: '100%' }">
       <n-grid x-gap="12" :cols="4">
         <n-gi span="1">
           <n-image width="80" height="80" :src="getImageUrl(camelCase(category.name))" />

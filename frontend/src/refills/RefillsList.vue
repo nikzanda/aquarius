@@ -2,7 +2,7 @@
 import { injectStrict } from '@/helpers/injectTypes';
 import { AxiosKey } from '@/symbols';
 import type { Refill } from '@/types/models';
-import { reactive, render } from 'vue';
+import { reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { NPageHeader, NH1, NDataTable, type DataTableColumns, NButton } from 'naive-ui';
 import { format } from 'date-fns';

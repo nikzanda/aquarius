@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { injectStrict } from '@/helpers/injectTypes';
 import { AxiosKey } from '@/symbols';
-import { ProductCategory } from '@/types/models';
 import { NPageHeader, NH1 } from 'naive-ui';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import ProductForm from './components/ProductForm.vue';

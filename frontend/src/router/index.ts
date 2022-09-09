@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { RouterView } from 'vue-router';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,7 +10,6 @@ const router = createRouter({
     },
     {
       path: '/filters',
-      component: () => RouterView,
       children: [
         {
           path: '',
@@ -22,7 +20,6 @@ const router = createRouter({
     },
     {
       path: '/products',
-      component: () => RouterView,
       children: [
         {
           path: '',
@@ -43,7 +40,6 @@ const router = createRouter({
     },
     {
       path: '/refills',
-      component: () => RouterView,
       children: [
         {
           path: '',

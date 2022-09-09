@@ -16,7 +16,7 @@ import { computed, ref, type PropType } from 'vue';
 import { RainDrop, Sprout, SoilMoistureField, Edit } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
 import { useRefillStore } from '@/stores/refill';
-import { addDays, differenceInDays } from 'date-fns';
+import { differenceInDays } from 'date-fns';
 
 const props = defineProps({
   product: {
