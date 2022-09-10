@@ -14,7 +14,6 @@ import {
 import { h, ref, type Component } from 'vue';
 import { Filter, Sun, Moon, RainDrop, Product, Fish } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
-import type { Theme } from '@/types/types';
 import { useThemeStore } from '@/stores/theme';
 
 const { t } = useI18n();
@@ -96,7 +95,7 @@ window.$message = useMessage();
           :value="themeStore.theme"
           checked-value="dark"
           unchecked-value="light"
-          @update:value="(theme: Theme) => themeStore.setTheme(theme)"
+          @update:value="(theme) => themeStore.setTheme(theme)"
         >
           <template #checked-icon>
             <n-icon>

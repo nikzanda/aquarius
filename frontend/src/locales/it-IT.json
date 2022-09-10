@@ -10,6 +10,14 @@
   "validations": {
     "required": "Campo obbligatorio"
   },
+  "home": {
+    "waterState": "Stato dell'acqua",
+    "lastRefill": "Ultimo cambio",
+    "table": {
+      "name": "Prodotto",
+      "category": "Categoria"
+    }
+  },
   "filters": {
     "name": "Filtri",
     "insertedAt": "Inserito il",

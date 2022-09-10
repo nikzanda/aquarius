@@ -60,5 +60,5 @@ axios('/refills', {
     </template>
   </n-page-header>
 
-  <n-data-table :columns="columns" :data="refills" :pagination="false" />
+  <n-data-table :columns="columns" :data="refills" :row-key="({ id }) => id" />
 </template>
