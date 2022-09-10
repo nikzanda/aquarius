@@ -98,7 +98,13 @@ const handleUseProduct = () => {
           tertiary
           circle
           type="info"
-          @click="() => $router.push({ name: 'products.update', params: { id: product.id } })"
+          @click="
+            () =>
+              $router.push({
+                name: 'products.update',
+                params: { id: product.id },
+              })
+          "
         >
           <template #icon>
             <n-icon>

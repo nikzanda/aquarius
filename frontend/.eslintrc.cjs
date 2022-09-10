@@ -12,4 +12,8 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  rules: {
+    'prettier/prettier': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+  },
 };

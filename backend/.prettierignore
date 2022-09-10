@@ -5,6 +5,3 @@ coverage
 
 # Ignore files
 *.yaml
-
-# Ignore folders
-frontend
