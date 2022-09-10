@@ -11,8 +11,11 @@
     "required": "Campo obbligatorio"
   },
   "home": {
+    "name": "Home",
     "waterState": "Stato dell'acqua",
     "lastRefill": "Ultimo cambio",
+    "changeWater": "Cambia acqua",
+    "sureToRefill": "Sei sicuro di voler cambiare l'acqua?",
     "table": {
       "name": "Prodotto",
       "category": "Categoria"

@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import { useRefillStore } from '@/stores/refill';
-import { NPageHeader, NH1, NButton, NDescriptions, NDescriptionsItem, NTime, NTabs, NTabPane } from 'naive-ui';
+import {
+  NPageHeader,
+  NH1,
+  NPopconfirm,
+  NButton,
+  NDescriptions,
+  NDescriptionsItem,
+  NTime,
+  NTabs,
+  NTabPane,
+} from 'naive-ui';
 import { useI18n } from 'vue-i18n';
 import ProductsTab from './components/ProductsTab.vue';
 
 const { t } = useI18n();
-const { lastRefill } = useRefillStore();
+const { lastRefill, createRefill } = useRefillStore();
 </script>
 
 <template>
@@ -15,11 +25,16 @@ const { lastRefill } = useRefillStore();
         {{ t('home.waterState') }}
       </n-h1>
     </template>
-    <!-- <template #extra>
-      <n-button tertiary type="primary" @click="$router.push({ name: 'products.create' })">
-        {{ t('commons.create') }}
-      </n-button>
-    </template> -->
+    <template #extra>
+      <n-popconfirm @positive-click="createRefill">
+        <template #trigger>
+          <n-button tertiary type="primary">
+            {{ t('home.changeWater') }}
+          </n-button>
+        </template>
+        {{ t('home.sureToRefill') }}
+      </n-popconfirm>
+    </template>
   </n-page-header>
 
   <n-descriptions label-placement="left">

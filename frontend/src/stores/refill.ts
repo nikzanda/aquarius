@@ -35,11 +35,18 @@ export const useRefillStore = defineStore('refill', () => {
       .catch(Promise.reject);
   };
 
+  const createRefill = () => {
+    return axios.post('/refills')
+      .then(({ data }) => (lastRefill.value = data))
+      .catch(Promise.reject);
+  }
+
   return {
     lastRefill,
     refills,
     count,
     getLastRefill,
     updateLastRefill,
+    createRefill
   };
 });

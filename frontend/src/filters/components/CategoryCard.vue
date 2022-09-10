@@ -136,7 +136,7 @@ const renewFilter = async () => {
 
       <template #action>
         <n-space justify="end">
-          <n-popconfirm @positive-click="() => removeFilter()">
+          <n-popconfirm @positive-click="removeFilter">
             <template #trigger>
               <n-button tertiary circle type="error" :disabled="!filter">
                 <template #icon>
@@ -147,7 +147,7 @@ const renewFilter = async () => {
             {{ t('filters.sureToRemove') }}
           </n-popconfirm>
 
-          <n-popconfirm @positive-click="() => renewFilter()">
+          <n-popconfirm @positive-click="renewFilter">
             <template #trigger>
               <n-button tertiary circle type="primary">
                 <template #icon>

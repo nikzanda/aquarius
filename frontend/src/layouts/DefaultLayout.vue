@@ -33,7 +33,7 @@ const menuOptions: MenuOption[] = [
             name: 'home',
           },
         },
-        { default: t('home') }
+        { default: t('home.name') }
       ),
     key: 'home',
     icon: renderIcon(Fish),
