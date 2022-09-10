@@ -3,15 +3,18 @@ import { useRefillStore } from '@/stores/refill';
 import type { Product } from '@/types/models';
 import { RainDrop, Sprout } from '@vicons/carbon';
 import { type DataTableColumns, NDataTable, NIcon, NTime, NSpace } from 'naive-ui';
+import { storeToRefs } from 'pinia';
 import { computed, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 type ProductRefills = Product & { refillDates: Date[] };
 
 const { t } = useI18n();
-const { lastRefill } = useRefillStore();
-const products = computed(() =>
-  lastRefill?.products.reduce((acc, pOnRefill) => {
+const store = useRefillStore();
+const { lastRefill } = storeToRefs(store);
+const products = computed(() => {
+  const { products = [] } = lastRefill.value || {};
+  return products.reduce((acc, pOnRefill) => {
     const index = acc.findIndex(({ id }) => id === pOnRefill.productId);
     if (~index) {
       acc[index].refillDates.push(new Date(pOnRefill.createdAt));
@@ -22,8 +25,8 @@ const products = computed(() =>
       });
     }
     return acc;
-  }, [] as ProductRefills[])
-);
+  }, [] as ProductRefills[]);
+});
 
 const columns: DataTableColumns<ProductRefills> = [
   {

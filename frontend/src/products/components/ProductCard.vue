@@ -17,6 +17,7 @@ import { RainDrop, Sprout, SoilMoistureField, Edit } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
 import { useRefillStore } from '@/stores/refill';
 import { differenceInDays } from 'date-fns';
+import { storeToRefs } from 'pinia';
 
 const props = defineProps({
   product: {
@@ -28,11 +29,14 @@ const props = defineProps({
 const { t } = useI18n();
 const productType = props.product.category as unknown as string;
 const loadingUseProduct = ref(false);
-const refillStore = useRefillStore();
+const store = useRefillStore();
+const { lastRefill } = storeToRefs(store);
+const { updateLastRefill } = store;
 const message = useMessage();
-const lastUse = computed(
-  () => refillStore.lastRefill?.products.filter(({ productId }) => productId === props.product.id)[0]
-);
+const lastUse = computed(() => {
+  const { products = [] } = lastRefill.value || {};
+  return products.filter(({ productId }) => productId === props.product.id)[0];
+});
 const remainingDays = computed(() => {
   if (props.product.useWhenRefilling || !lastUse.value) {
     return -1;
@@ -45,8 +49,7 @@ const remainingDays = computed(() => {
 const handleUseProduct = () => {
   loadingUseProduct.value = true;
 
-  refillStore
-    .updateLastRefill({ productId: props.product.id })
+  updateLastRefill({ productId: props.product.id })
     .then(() => message.success('ok'))
     .catch(() => message.error('error'))
     .finally(() => (loadingUseProduct.value = false));

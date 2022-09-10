@@ -11,11 +11,14 @@ import {
   NTabs,
   NTabPane,
 } from 'naive-ui';
+import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import ProductsTab from './components/ProductsTab.vue';
 
 const { t } = useI18n();
-const { lastRefill, createRefill } = useRefillStore();
+const store = useRefillStore();
+const { lastRefill } = storeToRefs(store);
+const { createRefill } = store;
 </script>
 
 <template>
