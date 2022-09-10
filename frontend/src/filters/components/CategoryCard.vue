@@ -46,10 +46,10 @@ const getLightColor = () => {
 
   switch (true) {
     case daysBeforeExpire.value >= 3:
-      return 'green';
+      return '#2dc937';
 
     case daysBeforeExpire.value < 3 && daysBeforeExpire.value > 0:
-      return 'yellow';
+      return '#efb700';
 
     case daysBeforeExpire.value <= 0:
       return 'red';
@@ -124,7 +124,7 @@ const renewFilter = async () => {
               <n-time :time="new Date(filter.createdAt)" format="dd/MM/yyyy" />
             </n-descriptions-item>
             <n-descriptions-item :label="t('filters.expiresIn')">
-              <span v-if="daysBeforeExpire > 0" :style="{ color: daysBeforeExpire <= 3 ? 'yellow' : '' }">
+              <span v-if="daysBeforeExpire > 0" :style="{ color: daysBeforeExpire <= 3 ? '#efb700' : '' }">
                 <n-number-animation :from="category.durationDays" :to="daysBeforeExpire" />
                 {{ t('filters.days') }}
               </span>

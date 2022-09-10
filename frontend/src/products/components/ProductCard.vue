@@ -86,7 +86,7 @@ const handleUseProduct = () => {
         <span v-if="remainingDays > 1">
           {{ t('products.nextUse', { days: remainingDays }) }}
         </span>
-        <span v-else-if="remainingDays === 1" :style="{ color: 'yellow' }">
+        <span v-else-if="remainingDays === 1" :style="{ color: '#efb700' }">
           {{ t('commons.tomorrow') }}
         </span>
         <span v-else :style="{ color: 'red' }">

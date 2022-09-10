@@ -14,18 +14,24 @@ const store = useRefillStore();
 const { lastRefill } = storeToRefs(store);
 const products = computed(() => {
   const { products = [] } = lastRefill.value || {};
-  return products.reduce((acc, pOnRefill) => {
-    const index = acc.findIndex(({ id }) => id === pOnRefill.productId);
-    if (~index) {
-      acc[index].refillDates.push(new Date(pOnRefill.createdAt));
-    } else {
-      acc.push({
-        ...pOnRefill.product,
-        refillDates: [new Date(pOnRefill.createdAt)],
-      });
-    }
-    return acc;
-  }, [] as ProductRefills[]);
+  return products
+    .reduce((acc, pOnRefill) => {
+      const index = acc.findIndex(({ id }) => id === pOnRefill.productId);
+      if (~index) {
+        acc[index].refillDates.push(new Date(pOnRefill.createdAt));
+      } else {
+        acc.push({
+          ...pOnRefill.product,
+          refillDates: [new Date(pOnRefill.createdAt)],
+        });
+      }
+      return acc;
+    }, [] as ProductRefills[])
+    .sort(({ name: nameA }, { name: nameB }) => {
+      if (nameA > nameB) return 1;
+      if (nameA < nameB) return -1;
+      return 0;
+    });
 });
 
 const columns: DataTableColumns<ProductRefills> = [
