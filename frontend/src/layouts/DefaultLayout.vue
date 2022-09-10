@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterLink, RouterView, useRoute } from 'vue-router';
 import {
   NLayout,
   NLayoutHeader,
@@ -11,12 +11,15 @@ import {
   NSpace,
   useMessage,
 } from 'naive-ui';
-import { h, ref, type Component } from 'vue';
+import { h, ref, watch, type Component } from 'vue';
 import { Filter, Sun, Moon, RainDrop, Product, Fish } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
 import { useThemeStore } from '@/stores/theme';
 
 const { t } = useI18n();
+const route = useRoute();
+const activeKey = ref<string | null>(null);
+const themeStore = useThemeStore();
 
 const renderIcon = (icon: Component) => () => h(NIcon, null, { default: () => h(icon) });
 
@@ -79,8 +82,12 @@ const menuOptions: MenuOption[] = [
   },
 ];
 
-const activeKey = ref<string | null>(null);
-const themeStore = useThemeStore();
+watch(
+  () => route.name,
+  (routeName) => {
+    activeKey.value = routeName ? (routeName as string).split('.')[0] : null;
+  }
+);
 
 window.$message = useMessage();
 </script>
