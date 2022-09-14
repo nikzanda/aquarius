@@ -12,7 +12,7 @@ import {
   useMessage,
 } from 'naive-ui';
 import { h, ref, watch, type Component } from 'vue';
-import { Filter, Sun, Moon, RainDrop, Product, Fish } from '@vicons/carbon';
+import { Filter, Sun, Moon, RainDrop, Product, Fish, Eyedropper } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
 import { useThemeStore } from '@/stores/theme';
 
@@ -65,6 +65,20 @@ const menuOptions: MenuOption[] = [
       ),
     key: 'products',
     icon: renderIcon(Product),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'tests.list',
+          },
+        },
+        { default: t('tests.name') }
+      ),
+    key: 'tests',
+    icon: renderIcon(Eyedropper),
   },
   {
     label: () =>

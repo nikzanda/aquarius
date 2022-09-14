@@ -70,9 +70,10 @@ model ProductsOnRefills {
 }
 
 model Strip {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
+  createdAt   DateTime @default(now())
 
   tests TestsOnStrips[]
 

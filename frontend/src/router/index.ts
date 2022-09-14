@@ -39,6 +39,21 @@ const router = createRouter({
       ],
     },
     {
+      path: '/tests',
+      children: [
+        {
+          path: '',
+          name: 'tests.list',
+          component: () => import('../tests/TestsList.vue')
+        },
+        {
+          path: 'new',
+          name: 'tests.create',
+          component: () => import('../tests/TestCreate.vue'),
+        },
+      ]
+    },
+    {
       path: '/refills',
       children: [
         {

@@ -54,5 +54,8 @@
     "nextUse": "Tra {days} giorni",
     "notUsedYet": "Non ancora utilizzato",
     "sureToUse": "Sei sicuro di voler usare il prodotto?"
+  },
+  "tests": {
+    "name": "Test"
   }
 }

@@ -62,6 +62,42 @@ export type ProductsOnRefills = {
 };
 
 /**
+ * Model Strip
+ *
+ */
+export type Strip = {
+  id: number
+  name: string
+  description: string | null
+  createdAt: string
+  tests: Test[];
+}
+
+/**
+ * Model Test
+ *
+ */
+export type Test = {
+  id: number
+  name: string
+  minLevel: number | null
+  maxLevel: number | null
+  createdAt: string
+  strips: Strip[];
+}
+
+/**
+ * Model TestsOnStrips
+ *
+ */
+export type TestsOnStrips = {
+  stripId: number
+  testId: number
+  strip: Strip;
+  test: Test;
+}
+
+/**
  * Enums
  */
 export enum ProductCategory {
