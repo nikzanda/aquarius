@@ -69,6 +69,39 @@ model ProductsOnRefills {
   @@map("products_on_refills")
 }
 
+model Strip {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+
+  tests TestsOnStrips[]
+
+  @@map("strips")
+}
+
+model Test {
+  id        Int      @id @default(autoincrement())
+  name      String
+  minLevel  Int?
+  maxLevel  Int?
+  createdAt DateTime @default(now())
+
+  strips TestsOnStrips[]
+
+  @@map("tests")
+}
+
+model TestsOnStrips {
+  stripId Int
+  testId  Int
+
+  strip Strip @relation(fields: [stripId], references: [id])
+  test  Test  @relation(fields: [testId], references: [id])
+
+  @@id([stripId, testId])
+  @@map("tests_on_strips")
+}
+
 enum ProductCategory {
   WATER
   PLANT

@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
-import { categoryRouter, filterRouter, refillRouter, productRouter } from './routers';
+import { categoryRouter, filterRouter, refillRouter, productRouter, testRouter, stripRouter } from './routers';
 
 dotenv.config();
 
@@ -14,6 +14,8 @@ apiRouter.use('/categories', categoryRouter);
 apiRouter.use('/filters', filterRouter);
 apiRouter.use('/refills', refillRouter);
 apiRouter.use('/products', productRouter);
+apiRouter.use('/tests', testRouter);
+apiRouter.use('/strips', stripRouter);
 
 app.use(cors());
 app.use(express.json());
