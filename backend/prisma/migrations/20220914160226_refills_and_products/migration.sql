@@ -7,7 +7,7 @@ CREATE TABLE `refills` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Product` (
+CREATE TABLE `products` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `category` ENUM('WATER', 'PLANT') NOT NULL,
@@ -16,12 +16,12 @@ CREATE TABLE `Product` (
     `useWhenRefilling` BOOLEAN NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `Product_name_key`(`name`),
+    UNIQUE INDEX `products_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `ProductsOnRefills` (
+CREATE TABLE `products_on_refills` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `refillId` INTEGER NOT NULL,
     `productId` INTEGER NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE `ProductsOnRefills` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `ProductsOnRefills` ADD CONSTRAINT `ProductsOnRefills_refillId_fkey` FOREIGN KEY (`refillId`) REFERENCES `refills`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `products_on_refills` ADD CONSTRAINT `products_on_refills_refillId_fkey` FOREIGN KEY (`refillId`) REFERENCES `refills`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ProductsOnRefills` ADD CONSTRAINT `ProductsOnRefills_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `Product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `products_on_refills` ADD CONSTRAINT `products_on_refills_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `products`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

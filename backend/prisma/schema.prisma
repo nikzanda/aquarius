@@ -53,6 +53,8 @@ model Product {
   createdAt        DateTime        @default(now())
 
   refills ProductsOnRefills[]
+
+  @@map("products")
 }
 
 model ProductsOnRefills {
@@ -63,6 +65,8 @@ model ProductsOnRefills {
 
   refill  Refill  @relation(fields: [refillId], references: [id])
   product Product @relation(fields: [productId], references: [id])
+
+  @@map("products_on_refills")
 }
 
 enum ProductCategory {
