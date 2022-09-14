@@ -5,6 +5,7 @@
 * [![MySQL][MySQL]][MySQL-url]
 * [![Node][Node.js]][Node-url]
 * [![Prisma][Prisma]][Prisma-url]
+* [![Express][Express.js]][Express-url]
 * [![Typescript][Typescript]][Typescript-url]
 * [![Vue][Vue.js]][Vue-url]
 
@@ -17,6 +18,7 @@
 ```sh
 npm install -g yarn
 ```
+* Docker Compose
 
 ### Installation
 1. Clone the repo
@@ -54,6 +56,8 @@ mv .env.example .env
 ```
 
 ## Development
+Run `sudo docker-compose up` to use MySQL with Docker.
+
 Run `yarn dev` in both backend and frontend folders.
 
 ## Production
@@ -66,6 +70,8 @@ Run `yarn build` in both backend and frontend folders. Remember to launch migrat
 [Node-url]: https://nodejs.dev/
 [Prisma]: https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white
 [Prisma-url]: https://www.prisma.io/
+[Express.js]: https://img.shields.io/badge/Express.js-404D59?style=for-the-badge
+[Express-url]: https://expressjs.com/
 [Typescript]: https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white
 [TypeScript-url]: https://www.typescriptlang.org/
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
