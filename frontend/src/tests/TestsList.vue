@@ -4,7 +4,7 @@ import { AxiosKey } from '@/symbols';
 import { h, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Test } from '@/types/models';
-import { NPageHeader, NH1, NSpace, NButton, type DataTableColumns, NDataTable, NIcon } from 'naive-ui';
+import { NPageHeader, NH1, NSpace, NButton, type DataTableColumns, NDataTable, NIcon, NPopconfirm } from 'naive-ui';
 import { useRouter } from 'vue-router';
 import { Edit, TrashCan } from '@vicons/carbon';
 
@@ -23,6 +23,16 @@ axios('/tests', {
 })
   .then(({ data: { result } }) => tests.push(...result))
   .catch(console.error);
+
+const handleDelete = (testId: number) => {
+  axios
+    .delete(`/tests/${testId}`)
+    .then(() => {
+      const index = tests.findIndex(({ id }) => id === testId);
+      if (~index) tests.splice(index, 1);
+    })
+    .catch(() => {});
+};
 
 const columns: DataTableColumns<Test> = [
   {
@@ -59,15 +69,24 @@ const columns: DataTableColumns<Test> = [
           }
         ),
         h(
-          NButton,
+          NPopconfirm,
           {
-            tertiary: true,
-            circle: true,
-            type: 'error',
-            onClick: () => alert('TODO'),
+            onPositiveClick: () => handleDelete(id),
           },
           {
-            default: () => h(NIcon, {}, { default: () => h(TrashCan) }),
+            trigger: () =>
+              h(
+                NButton,
+                {
+                  tertiary: true,
+                  circle: true,
+                  type: 'error',
+                },
+                {
+                  default: () => h(NIcon, {}, { default: () => h(TrashCan) }),
+                }
+              ),
+            default: () => t('tests.sureToDelete'),
           }
         ),
       ]);

@@ -57,6 +57,7 @@
   },
   "tests": {
     "name": "Test",
+    "sureToDelete": "Sei sicuro di voler cancellare il test?",
     "createPage": {
       "title": "Crea nuovo test"
     },
