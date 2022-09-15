@@ -66,14 +66,24 @@ const handleSubmit = () => {
       <!-- MinLevel -->
       <n-gi>
         <n-form-item path="minLevel" :label="t('tests.form.minLevel')">
-          <n-input-number v-model:value="model.minLevel" :placeholder="t('tests.form.minLevel')" />
+          <n-input-number
+            v-model:value="model.minLevel"
+            :min="0"
+            :placeholder="t('tests.form.minLevel')"
+            :style="{ width: '100%' }"
+          />
         </n-form-item>
       </n-gi>
 
       <!-- MaxLevel -->
       <n-gi>
         <n-form-item path="maxLevel" :label="t('tests.form.maxLevel')">
-          <n-input-number v-model:value="model.maxLevel" :placeholder="t('tests.form.maxLevel')" />
+          <n-input-number
+            v-model:value="model.maxLevel"
+            :min="model.minLevel || 0"
+            :placeholder="t('tests.form.maxLevel')"
+            :style="{ width: '100%' }"
+          />
         </n-form-item>
       </n-gi>
     </n-grid>

@@ -51,6 +51,11 @@ const router = createRouter({
           name: 'tests.create',
           component: () => import('../tests/TestCreate.vue'),
         },
+        {
+          path: ':id',
+          name: 'tests.update',
+          component: () => import('../tests/TestUpdate.vue'),
+        },
       ]
     },
     {

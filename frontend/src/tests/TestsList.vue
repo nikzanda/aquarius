@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { injectStrict } from '@/helpers/injectTypes';
 import { AxiosKey } from '@/symbols';
-import { reactive } from 'vue';
+import { h, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Test } from '@/types/models';
-import { NPageHeader, NH1, NSpace, NButton } from 'naive-ui';
+import { NPageHeader, NH1, NSpace, NButton, type DataTableColumns, NDataTable, NIcon } from 'naive-ui';
+import { useRouter } from 'vue-router';
+import { Edit, TrashCan } from '@vicons/carbon';
 
 const { t } = useI18n();
 const axios = injectStrict(AxiosKey);
+const router = useRouter();
 
 const tests = reactive<Test[]>([]);
 
@@ -20,6 +23,57 @@ axios('/tests', {
 })
   .then(({ data: { result } }) => tests.push(...result))
   .catch(console.error);
+
+const columns: DataTableColumns<Test> = [
+  {
+    title: t('tests.table.name'),
+    key: 'name',
+  },
+  {
+    title: t('tests.table.minLevel'),
+    key: 'minLevel',
+  },
+  {
+    title: t('tests.table.maxLevel'),
+    key: 'maxLevel',
+  },
+  {
+    title: t('commons.actions'),
+    key: 'actions',
+    render: ({ id }) => {
+      return h(NSpace, {}, [
+        h(
+          NButton,
+          {
+            tertiary: true,
+            circle: true,
+            type: 'info',
+            onClick: () =>
+              router.push({
+                name: 'tests.update',
+                params: { id },
+              }),
+          },
+          {
+            default: () => h(NIcon, {}, { default: () => h(Edit) }),
+          }
+        ),
+        h(
+          NButton,
+          {
+            tertiary: true,
+            circle: true,
+            type: 'error',
+            onClick: () => alert('TODO'),
+          },
+          {
+            default: () => h(NIcon, {}, { default: () => h(TrashCan) }),
+          }
+        ),
+      ]);
+    },
+  },
+];
 </script>
 
 <template>
@@ -36,5 +90,5 @@ axios('/tests', {
     </template>
   </n-page-header>
 
-  {{ tests }}
+  <n-data-table :columns="columns" :data="tests" :row-key="({ id }) => id" />
 </template>

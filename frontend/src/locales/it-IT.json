@@ -56,6 +56,19 @@
     "sureToUse": "Sei sicuro di voler usare il prodotto?"
   },
   "tests": {
-    "name": "Test"
+    "name": "Test",
+    "createPage": {
+      "title": "Crea nuovo test"
+    },
+    "table": {
+      "name": "Nome",
+      "minLevel": "Soglia minima",
+      "maxLevel": "Soglia massima"
+    },
+    "form": {
+      "name": "Nome",
+      "minLevel": "Soglia minima",
+      "maxLevel": "Soglia massima"
+    }
   }
 }
