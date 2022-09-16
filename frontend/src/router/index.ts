@@ -59,6 +59,26 @@ const router = createRouter({
       ]
     },
     {
+      path: '/strips',
+      children: [
+        {
+          path: '',
+          name: 'strips.list',
+          component: () => import('../strips/StripsList.vue')
+        },
+        {
+          path: 'new',
+          name: 'strips.create',
+          component: () => import('../strips/StripCreate.vue'),
+        },
+        {
+          path: ':id',
+          name: 'strips.update',
+          component: () => import('../strips/StripUpdate.vue'),
+        },
+      ]
+    },
+    {
       path: '/refills',
       children: [
         {

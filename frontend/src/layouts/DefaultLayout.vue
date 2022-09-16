@@ -12,7 +12,7 @@ import {
   useMessage,
 } from 'naive-ui';
 import { h, ref, watch, type Component } from 'vue';
-import { Filter, Sun, Moon, RainDrop, Product, Fish, Eyedropper } from '@vicons/carbon';
+import { Filter, Sun, Moon, RainDrop, Product, Fish, Eyedropper, Template } from '@vicons/carbon';
 import { useI18n } from 'vue-i18n';
 import { useThemeStore } from '@/stores/theme';
 
@@ -33,7 +33,7 @@ const menuOptions: MenuOption[] = [
             name: 'home',
           },
         },
-        { default: t('home.name') }
+        { default: () => t('home.name') }
       ),
     key: 'home',
     icon: renderIcon(Fish),
@@ -47,7 +47,7 @@ const menuOptions: MenuOption[] = [
             name: 'filters.list',
           },
         },
-        { default: t('filters.name') }
+        { default: () => t('filters.name') }
       ),
     key: 'filters',
     icon: renderIcon(Filter),
@@ -61,7 +61,7 @@ const menuOptions: MenuOption[] = [
             name: 'products.list',
           },
         },
-        { default: t('products.name') }
+        { default: () => t('products.name') }
       ),
     key: 'products',
     icon: renderIcon(Product),
@@ -75,7 +75,7 @@ const menuOptions: MenuOption[] = [
             name: 'tests.list',
           },
         },
-        { default: t('tests.name') }
+        { default: () => t('tests.name') }
       ),
     key: 'tests',
     icon: renderIcon(Eyedropper),
@@ -86,10 +86,24 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
+            name: 'strips.list',
+          },
+        },
+        { default: () => t('strips.name') }
+      ),
+    key: 'strips',
+    icon: renderIcon(Template),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
             name: 'refills.list',
           },
         },
-        { default: t('refills.name') }
+        { default: () => t('refills.name') }
       ),
     key: 'refills',
     icon: renderIcon(RainDrop),
