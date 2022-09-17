@@ -9,7 +9,8 @@ const i18n = createI18n<[MessageSchema], 'it-IT'>({
   messages: {
     'it-IT': itIT,
   },
-  silentTranslationWarn: true,
+  missingWarn: false,
+  fallbackWarn: false,
 });
 
 export default i18n;

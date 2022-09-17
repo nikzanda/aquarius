@@ -38,7 +38,15 @@ const handleDelete = (stripId: number) => {
 const columns: DataTableColumns<Strip> = [
   {
     type: 'expand',
-    renderExpand: ({ tests }) => tests.map(({ test: { name } }) => name),
+    renderExpand: ({ tests }) =>
+      tests
+        .map(({ test: { name } }) => name)
+        .sort((nameA, nameB) => {
+          if (nameA > nameB) return 1;
+          if (nameA < nameB) return -1;
+          return 0;
+        })
+        .join(' '),
   },
   {
     title: t('strips.table.name'),
@@ -52,45 +60,51 @@ const columns: DataTableColumns<Strip> = [
     title: t('commons.actions'),
     key: 'actions',
     render: ({ id }) => {
-      return h(NSpace, {}, [
-        h(
-          NButton,
-          {
-            tertiary: true,
-            circle: true,
-            type: 'info',
-            onClick: () =>
-              router.push({
-                name: 'strips.update',
-                params: { id },
-              }),
-          },
-          {
-            default: () => h(NIcon, {}, { default: () => h(Edit) }),
-          }
-        ),
-        h(
-          NPopconfirm,
-          {
-            onPositiveClick: () => handleDelete(id),
-          },
-          {
-            trigger: () =>
-              h(
-                NButton,
-                {
-                  tertiary: true,
-                  circle: true,
-                  type: 'error',
-                },
-                {
-                  default: () => h(NIcon, {}, { default: () => h(TrashCan) }),
-                }
-              ),
-            default: () => t('strips.sureToDelete'),
-          }
-        ),
-      ]);
+      return h(
+        NSpace,
+        {},
+        {
+          default: () => [
+            h(
+              NButton,
+              {
+                tertiary: true,
+                circle: true,
+                type: 'info',
+                onClick: () =>
+                  router.push({
+                    name: 'strips.update',
+                    params: { id },
+                  }),
+              },
+              {
+                default: () => h(NIcon, {}, { default: () => h(Edit) }),
+              }
+            ),
+            h(
+              NPopconfirm,
+              {
+                onPositiveClick: () => handleDelete(id),
+              },
+              {
+                trigger: () =>
+                  h(
+                    NButton,
+                    {
+                      tertiary: true,
+                      circle: true,
+                      type: 'error',
+                    },
+                    {
+                      default: () => h(NIcon, {}, { default: () => h(TrashCan) }),
+                    }
+                  ),
+                default: () => t('strips.sureToDelete'),
+              }
+            ),
+          ],
+        }
+      );
     },
   },
 ];

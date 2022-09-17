@@ -112,17 +112,6 @@ export const update = async (req: Request<QueryParamId, unknown, StripUpdateBody
           },
         }))
       );
-
-      await stripDB.update({
-        where: {
-          id: +id,
-        },
-        data: {
-          tests: {
-            set: [],
-          },
-        },
-      });
     }
 
     const updatedStrip = await stripDB.update({
@@ -133,6 +122,7 @@ export const update = async (req: Request<QueryParamId, unknown, StripUpdateBody
         ...(name && { name }),
         ...(description && { description }),
         tests: {
+          deleteMany: {},
           create: [
             ...tests.map(({ id }) => ({
               test: { connect: { id } },
