@@ -14,7 +14,6 @@ const router = useRouter();
 
 const strips = reactive<Strip[]>([]);
 
-// TODO: includi tests
 axios('/strips', {
   params: {
     skip: 0,
@@ -37,6 +36,10 @@ const handleDelete = (stripId: number) => {
 };
 
 const columns: DataTableColumns<Strip> = [
+  {
+    type: 'expand',
+    renderExpand: ({ tests }) => tests.map(({ test: { name } }) => name),
+  },
   {
     title: t('strips.table.name'),
     key: 'name',

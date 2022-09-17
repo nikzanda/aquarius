@@ -3,7 +3,7 @@ import { AxiosKey } from '@/symbols';
 import { injectStrict } from '@/helpers/injectTypes';
 import { useRoute, useRouter } from 'vue-router';
 import { ref } from 'vue';
-import type { Strip } from '@/types/models';
+import type { Strip, TestsOnStrips } from '@/types/models';
 import { NPageHeader, NH1, NSkeleton } from 'naive-ui';
 import StripForm from './components/StripForm.vue';
 
@@ -15,9 +15,13 @@ const { id } = route.params;
 
 const strip = ref<Strip>();
 
-// TODO: includi tests
 axios(`/strips/${id}`, { params: { include: 'tests' } })
-  .then(({ data }) => (strip.value = data))
+  .then(({ data }) => {
+    strip.value = {
+      ...data,
+      testsIds: data.tests.map(({ testId }: TestsOnStrips) => testId),
+    };
+  })
   .catch(() => router.push({ name: 'strips.list' }));
 
 const handleSubmit = (data: any) => {
@@ -39,8 +43,6 @@ const handleSubmit = (data: any) => {
       <n-h1 v-if="strip">{{ strip.name }}</n-h1>
     </template>
   </n-page-header>
-
-  {{ strip }}
 
   <strip-form v-if="strip" :strip="strip" :loading="sending" @submit="handleSubmit" />
   <n-skeleton v-else text :repeat="2" />

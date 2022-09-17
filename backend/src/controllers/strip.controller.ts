@@ -22,6 +22,13 @@ export const findAll = async (req: TypedRequestQuery<StripQuery>, res: TypedResp
       ],
       where,
       // TODO: aggiungere include nella query
+      include: {
+        tests: {
+          include: {
+            test: true,
+          },
+        },
+      },
     }),
     stripDB.count({ where }),
   ]);
@@ -38,6 +45,13 @@ export const findOne = async (req: Request<QueryParamId>, res: Response) => {
   const strip = await stripDB.findUnique({
     where: {
       id: +id,
+    },
+    include: {
+      tests: {
+        include: {
+          test: true,
+        },
+      },
     },
   });
 

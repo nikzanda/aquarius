@@ -70,7 +70,7 @@ export type Strip = {
   name: string
   description: string | null
   createdAt: string
-  tests: Test[];
+  tests: TestsOnStrips[];
 }
 
 /**
@@ -83,7 +83,7 @@ export type Test = {
   minLevel: number | null
   maxLevel: number | null
   createdAt: string
-  strips: Strip[];
+  strips: TestsOnStrips[];
 }
 
 /**

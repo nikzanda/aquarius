@@ -5,7 +5,7 @@ import { validate } from '../middlewares/middlewares';
 import * as stripController from '../controllers/strip.controller';
 
 const router = Router();
-const checkInclude = query('include').toArray().isIn(['strips']).optional();
+const checkInclude = query('include').toArray().isIn(['tests']).optional();
 
 router
   .route('')
