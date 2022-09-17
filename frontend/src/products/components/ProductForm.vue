@@ -120,6 +120,7 @@ const handleSubmit = () => {
             button-placement="both"
             :placeholder="t('products.form.frequencyInDays')"
             :min="1"
+            :style="{ width: '100%' }"
           />
         </n-form-item>
       </n-gi>
