@@ -1,12 +1,13 @@
-import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
-import { TypedRequestQuery, TypedResponse, FindAllResponse, QueryParamId, TypedRequestBody } from '../types/commons';
-import { StripQuery, StripCreateBody, StripUpdateBody } from '../types/strip';
+import { getInclude } from '../helpers/strip';
+import { TypedRequestQuery, TypedResponse, FindAllResponse, QueryParamId } from '../types/commons';
+import { StripQuery, StripCreateBody, StripUpdateBody, Include } from '../types/strip';
+import client from '../../prisma/index';
 
-const { strip: stripDB, test: testDB } = new PrismaClient();
+const { strip: stripDB, test: testDB } = client;
 
 export const findAll = async (req: TypedRequestQuery<StripQuery>, res: TypedResponse<FindAllResponse>) => {
-  const { skip, take, sortByAsc, sortByDesc, name } = req.query;
+  const { skip, take, include, sortByAsc, sortByDesc, name } = req.query;
 
   const where = {
     ...(name && { name: { search: name } }),
@@ -21,14 +22,9 @@ export const findAll = async (req: TypedRequestQuery<StripQuery>, res: TypedResp
         ...(sortByDesc?.length ? sortByDesc.map((field) => ({ [field]: 'desc' })) : []),
       ],
       where,
-      // TODO: aggiungere include nella query
-      include: {
-        tests: {
-          include: {
-            test: true,
-          },
-        },
-      },
+      ...(include?.length && {
+        include: getInclude(include),
+      }),
     }),
     stripDB.count({ where }),
   ]);
@@ -39,26 +35,27 @@ export const findAll = async (req: TypedRequestQuery<StripQuery>, res: TypedResp
   });
 };
 
-export const findOne = async (req: Request<QueryParamId>, res: Response) => {
+export const findOne = async (req: Request<QueryParamId, unknown, unknown, { include: Include[] }>, res: Response) => {
   const { id } = req.params;
+  const { include } = req.query;
 
   const strip = await stripDB.findUnique({
+    ...(include?.length && {
+      include: getInclude(include),
+    }),
     where: {
       id: +id,
-    },
-    include: {
-      tests: {
-        include: {
-          test: true,
-        },
-      },
     },
   });
 
   res.json(strip);
 };
 
-export const create = async (req: TypedRequestBody<StripCreateBody>, res: Response) => {
+export const create = async (
+  req: Request<unknown, unknown, StripCreateBody, { include: Include[] }>,
+  res: Response
+) => {
+  const { include } = req.query;
   const { name, description, testsIds } = req.body;
   const tests = [];
 
@@ -76,6 +73,9 @@ export const create = async (req: TypedRequestBody<StripCreateBody>, res: Respon
     }
 
     const newStrip = await stripDB.create({
+      ...(include?.length && {
+        include: getInclude(include),
+      }),
       data: {
         name,
         description,
@@ -95,10 +95,13 @@ export const create = async (req: TypedRequestBody<StripCreateBody>, res: Respon
   }
 };
 
-export const update = async (req: Request<QueryParamId, unknown, StripUpdateBody>, res: Response) => {
+export const update = async (
+  req: Request<QueryParamId, unknown, StripUpdateBody, { include: Include[] }>,
+  res: Response
+) => {
   const { id } = req.params;
+  const { include } = req.query;
   const { name, description, testsIds } = req.body;
-
   const tests = [];
 
   try {
@@ -115,6 +118,9 @@ export const update = async (req: Request<QueryParamId, unknown, StripUpdateBody
     }
 
     const updatedStrip = await stripDB.update({
+      ...(include?.length && {
+        include: getInclude(include),
+      }),
       where: {
         id: +id,
       },
@@ -141,21 +147,25 @@ export const update = async (req: Request<QueryParamId, unknown, StripUpdateBody
 export const remove = async (req: Request<QueryParamId>, res: Response) => {
   const { id } = req.params;
 
-  const strip = await stripDB.findUnique({
-    where: {
-      id: +id,
-    },
-  });
+  try {
+    const strip = await stripDB.findUnique({
+      where: {
+        id: +id,
+      },
+    });
 
-  if (!strip) {
-    return res.sendStatus(404);
+    if (!strip) {
+      return res.sendStatus(404);
+    }
+
+    await stripDB.delete({
+      where: {
+        id: +id,
+      },
+    });
+
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(400).json(error);
   }
-
-  await stripDB.delete({
-    where: {
-      id: +id,
-    },
-  });
-
-  res.sendStatus(204);
 };

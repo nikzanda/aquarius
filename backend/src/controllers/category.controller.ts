@@ -1,9 +1,9 @@
-import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
-import { CategoryQuery } from '../types/category';
+import { CategoryQuery, Include } from '../types/category';
 import { FindAllResponse, QueryParamId, TypedRequestQuery, TypedResponse } from '../types/commons';
+import client from '../../prisma/index';
 
-const { category: categoryDB } = new PrismaClient();
+const { category: categoryDB } = client;
 
 export const findAll = async (req: TypedRequestQuery<CategoryQuery>, res: TypedResponse<FindAllResponse>) => {
   const { skip, take, name, optional, include, sortByAsc, sortByDesc } = req.query;
@@ -35,7 +35,7 @@ export const findAll = async (req: TypedRequestQuery<CategoryQuery>, res: TypedR
   });
 };
 
-export const findOne = async (req: Request<QueryParamId, unknown, unknown, { include: string[] }>, res: Response) => {
+export const findOne = async (req: Request<QueryParamId, unknown, unknown, { include: Include[] }>, res: Response) => {
   const { id } = req.params;
   const { include } = req.query;
 

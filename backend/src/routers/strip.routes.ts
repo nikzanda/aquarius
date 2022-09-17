@@ -11,16 +11,22 @@ router
   .route('')
   .get([...commonsValidations, checkInclude], validate, stripController.findAll)
   .post(
-    [body('name').isString(), body('description').isString().optional(), body('productsIds').isArray().optional()],
+    [
+      checkInclude,
+      body('name').isString(),
+      body('description').isString().optional(),
+      body('productsIds').isArray().optional(),
+    ],
     validate,
     stripController.create
   );
 
 router
   .route('/:id')
-  .get(stripController.findOne)
+  .get([checkInclude], stripController.findOne)
   .patch(
     [
+      checkInclude,
       body('name').isString().optional(),
       body('description').isString().optional(),
       body('productsIds').isArray().optional(),

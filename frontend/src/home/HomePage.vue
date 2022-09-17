@@ -13,6 +13,7 @@ import {
 } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
+import TestsTab from './components/TestsTab.vue';
 import ProductsTab from './components/ProductsTab.vue';
 
 const { t } = useI18n();
@@ -47,7 +48,9 @@ const { createRefill } = store;
   </n-descriptions>
 
   <n-tabs type="line" animated>
-    <!-- <n-tab-pane name="tests" :tab="t('tests.name')"> TODO... </n-tab-pane> -->
+    <n-tab-pane name="tests" :tab="t('tests.name')">
+      <tests-tab />
+    </n-tab-pane>
     <n-tab-pane name="products" :tab="t('products.name')">
       <products-tab />
     </n-tab-pane>

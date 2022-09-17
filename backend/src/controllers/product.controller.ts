@@ -1,12 +1,13 @@
-import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
-import { FindAllResponse, QueryParamId, TypedRequestBody, TypedRequestQuery, TypedResponse } from '../types/commons';
-import { ProductCreateBody, ProductQuery, ProductUpdateBody } from '../types/product';
+import { getInclude } from '../helpers/product';
+import { FindAllResponse, QueryParamId, TypedRequestQuery, TypedResponse } from '../types/commons';
+import { Include, ProductCreateBody, ProductQuery, ProductUpdateBody } from '../types/product';
+import client from '../../prisma/index';
 
-const { product: productDB } = new PrismaClient();
+const { product: productDB } = client;
 
 export const findAll = async (req: TypedRequestQuery<ProductQuery>, res: TypedResponse<FindAllResponse>) => {
-  const { skip, take, name, sortByAsc, sortByDesc } = req.query;
+  const { skip, take, name, include, sortByAsc, sortByDesc } = req.query;
 
   const where = {
     ...(name && { name: { search: name } }),
@@ -20,6 +21,9 @@ export const findAll = async (req: TypedRequestQuery<ProductQuery>, res: TypedRe
         ...(sortByAsc?.length ? sortByAsc.map((field) => ({ [field]: 'asc' })) : []),
         ...(sortByDesc?.length ? sortByDesc.map((field) => ({ [field]: 'desc' })) : []),
       ],
+      ...(include?.length && {
+        include: getInclude(include),
+      }),
       where,
     }),
     productDB.count({ where }),
@@ -31,10 +35,14 @@ export const findAll = async (req: TypedRequestQuery<ProductQuery>, res: TypedRe
   });
 };
 
-export const findOne = async (req: Request<QueryParamId>, res: Response) => {
+export const findOne = async (req: Request<QueryParamId, unknown, unknown, { include: Include[] }>, res: Response) => {
   const { id } = req.params;
+  const { include } = req.query;
 
   const product = await productDB.findUnique({
+    ...(include?.length && {
+      include: getInclude(include),
+    }),
     where: {
       id: +id,
     },
@@ -43,11 +51,18 @@ export const findOne = async (req: Request<QueryParamId>, res: Response) => {
   res.json(product);
 };
 
-export const create = async (req: TypedRequestBody<ProductCreateBody>, res: Response) => {
+export const create = async (
+  req: Request<unknown, unknown, ProductCreateBody, { include: Include[] }>,
+  res: Response
+) => {
+  const { include } = req.query;
   const { name, category, useWhenRefilling, frequencyInDays, quantity } = req.body;
 
   try {
     const newProduct = await productDB.create({
+      ...(include?.length && {
+        include: getInclude(include),
+      }),
       data: {
         name,
         category,
@@ -63,12 +78,19 @@ export const create = async (req: TypedRequestBody<ProductCreateBody>, res: Resp
   }
 };
 
-export const update = async (req: Request<QueryParamId, unknown, ProductUpdateBody>, res: Response) => {
+export const update = async (
+  req: Request<QueryParamId, unknown, ProductUpdateBody, { include: Include[] }>,
+  res: Response
+) => {
   const { id } = req.params;
+  const { include } = req.query;
   const { name, category, useWhenRefilling, frequencyInDays, quantity } = req.body;
 
   try {
     const updatedProduct = await productDB.update({
+      ...(include?.length && {
+        include: getInclude(include),
+      }),
       where: {
         id: +id,
       },
@@ -90,21 +112,25 @@ export const update = async (req: Request<QueryParamId, unknown, ProductUpdateBo
 export const remove = async (req: Request<QueryParamId>, res: Response) => {
   const { id } = req.params;
 
-  const product = await productDB.findUnique({
-    where: {
-      id: +id,
-    },
-  });
+  try {
+    const product = await productDB.findUnique({
+      where: {
+        id: +id,
+      },
+    });
 
-  if (!product) {
-    return res.sendStatus(404);
+    if (!product) {
+      return res.sendStatus(404);
+    }
+
+    await productDB.delete({
+      where: {
+        id: +id,
+      },
+    });
+
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(400).json(error);
   }
-
-  await productDB.delete({
-    where: {
-      id: +id,
-    },
-  });
-
-  res.sendStatus(204);
 };

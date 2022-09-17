@@ -1,10 +1,11 @@
 import { QueryPagination } from './commons';
 
 type Sortable = 'name' | 'createdAt';
+export type Include = 'strips' | 'refills';
 
 export type TestQuery = QueryPagination & {
   name?: string;
-  include?: 'strips'[];
+  include?: Include[];
   sortByAsc?: Sortable[];
   sortByDesc?: Sortable[];
 };

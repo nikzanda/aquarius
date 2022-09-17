@@ -5,18 +5,18 @@ import * as refillController from '../controllers/refill.controller';
 import { commonsValidations } from '../helpers/queryValidations';
 
 const router = Router();
-const checkInclude = query('include').toArray().isIn(['products']).optional();
+const checkInclude = query('include').toArray().isIn(['products', 'tests']).optional();
 
 router
   .route('')
   .get([...commonsValidations, checkInclude], validate, refillController.findAll)
-  .post([body('productsIds').isArray().optional(), validate, refillController.create]);
+  .post([checkInclude, body('productsIds').isArray().optional(), validate], refillController.create);
 
 router.get('/last', refillController.findLast);
 
 router
   .route('/:id')
   .get([checkInclude], validate, refillController.findOne)
-  .patch([body('productId').isInt()], validate, refillController.update);
+  .patch([checkInclude, body('productId').isInt()], validate, refillController.update);
 
 export default router;
