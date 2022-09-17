@@ -71,5 +71,21 @@
       "minLevel": "Soglia minima",
       "maxLevel": "Soglia massima"
     }
+  },
+  "strips": {
+    "name": "Strisce",
+    "sureToDelete": "Sei sicuro di voler cancellare la striscia?",
+    "createPage": {
+      "title": "Crea nuova striscia"
+    },
+    "table": {
+      "name": "Nome",
+      "description": "Descrizione"
+    },
+    "form": {
+      "name": "Nome",
+      "description": "Descrizione",
+      "tests": "Test"
+    }
   }
 }

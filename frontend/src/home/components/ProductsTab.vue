@@ -41,7 +41,9 @@ const columns: DataTableColumns<ProductRefills> = [
       h(
         NSpace,
         { vertical: true },
-        refillDates.map((time) => h(NTime, { time, format: 'dd/MM/yyyy HH:mm' }))
+        {
+          default: () => refillDates.map((time) => h(NTime, { time, format: 'dd/MM/yyyy HH:mm' })),
+        }
       ),
   },
   {
@@ -61,7 +63,7 @@ const columns: DataTableColumns<ProductRefills> = [
         {
           color,
         },
-        h(iconComponent)
+        { default: () => h(iconComponent) }
       );
     },
   },

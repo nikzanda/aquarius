@@ -51,45 +51,51 @@ const columns: DataTableColumns<Test> = [
     title: t('commons.actions'),
     key: 'actions',
     render: ({ id }) => {
-      return h(NSpace, {}, [
-        h(
-          NButton,
-          {
-            tertiary: true,
-            circle: true,
-            type: 'info',
-            onClick: () =>
-              router.push({
-                name: 'tests.update',
-                params: { id },
-              }),
-          },
-          {
-            default: () => h(NIcon, {}, { default: () => h(Edit) }),
-          }
-        ),
-        h(
-          NPopconfirm,
-          {
-            onPositiveClick: () => handleDelete(id),
-          },
-          {
-            trigger: () =>
-              h(
-                NButton,
-                {
-                  tertiary: true,
-                  circle: true,
-                  type: 'error',
-                },
-                {
-                  default: () => h(NIcon, {}, { default: () => h(TrashCan) }),
-                }
-              ),
-            default: () => t('tests.sureToDelete'),
-          }
-        ),
-      ]);
+      return h(
+        NSpace,
+        {},
+        {
+          default: () => [
+            h(
+              NButton,
+              {
+                tertiary: true,
+                circle: true,
+                type: 'info',
+                onClick: () =>
+                  router.push({
+                    name: 'tests.update',
+                    params: { id },
+                  }),
+              },
+              {
+                default: () => h(NIcon, {}, { default: () => h(Edit) }),
+              }
+            ),
+            h(
+              NPopconfirm,
+              {
+                onPositiveClick: () => handleDelete(id),
+              },
+              {
+                trigger: () =>
+                  h(
+                    NButton,
+                    {
+                      tertiary: true,
+                      circle: true,
+                      type: 'error',
+                    },
+                    {
+                      default: () => h(NIcon, {}, { default: () => h(TrashCan) }),
+                    }
+                  ),
+                default: () => t('tests.sureToDelete'),
+              }
+            ),
+          ],
+        }
+      );
     },
   },
 ];
