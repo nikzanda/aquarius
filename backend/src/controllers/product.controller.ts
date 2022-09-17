@@ -75,7 +75,7 @@ export const update = async (req: Request<QueryParamId, unknown, ProductUpdateBo
       data: {
         ...(name && { name }),
         ...(category && { category }),
-        ...(useWhenRefilling && { useWhenRefilling }),
+        ...(useWhenRefilling != null && { useWhenRefilling }),
         ...(frequencyInDays && { frequencyInDays }),
         ...(quantity && { quantity }),
       },
