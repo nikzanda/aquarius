@@ -19,7 +19,7 @@ router
     validate,
     filterController.findAll
   )
-  .post([body('categoryId').toInt()], validate, filterController.create);
+  .post([checkInclude, body('categoryId').toInt()], validate, filterController.create);
 
 router.route('/:id').get([checkInclude], validate, filterController.findOne).delete(filterController.remove);
 

@@ -1,8 +1,10 @@
 import { QueryPagination } from './commons';
 
+export type Include = 'category';
+
 export type FilterQuery = QueryPagination & {
   categoryId?: string;
-  include?: 'category'[];
+  include?: Include[];
 };
 
 export type FilterBody = {

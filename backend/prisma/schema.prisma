@@ -20,6 +20,7 @@ model Category {
 
   filters Filter[]
 
+  @@fulltext([name, description])
   @@map("categories")
 }
 
@@ -39,6 +40,7 @@ model Refill {
   createdAt DateTime @default(now())
 
   products ProductsOnRefills[]
+  tests    TestsOnRefills[]
 
   @@map("refills")
 }
@@ -54,6 +56,7 @@ model Product {
 
   refills ProductsOnRefills[]
 
+  @@fulltext([name])
   @@map("products")
 }
 
@@ -67,6 +70,56 @@ model ProductsOnRefills {
   product Product @relation(fields: [productId], references: [id])
 
   @@map("products_on_refills")
+}
+
+model Strip {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+
+  tests TestsOnStrips[]
+
+  @@fulltext([name])
+  @@map("strips")
+}
+
+model Test {
+  id        Int      @id @default(autoincrement())
+  name      String
+  minLevel  Int?
+  maxLevel  Int?
+  createdAt DateTime @default(now())
+
+  strips  TestsOnStrips[]
+  refills TestsOnRefills[]
+
+  @@fulltext([name])
+  @@map("tests")
+}
+
+model TestsOnStrips {
+  stripId Int
+  testId  Int
+
+  strip Strip @relation(fields: [stripId], references: [id])
+  test  Test  @relation(fields: [testId], references: [id])
+
+  @@id([stripId, testId])
+  @@map("tests_on_strips")
+}
+
+model TestsOnRefills {
+  id        Int      @id @default(autoincrement())
+  refillId  Int
+  testId    Int
+  value     Float
+  createdAt DateTime @default(now())
+
+  refill Refill @relation(fields: [refillId], references: [id])
+  test   Test   @relation(fields: [testId], references: [id])
+
+  @@map("tests_on_refills")
 }
 
 enum ProductCategory {

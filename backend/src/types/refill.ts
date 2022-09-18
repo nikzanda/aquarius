@@ -1,17 +1,25 @@
 import { QueryPagination } from './commons';
 
 type Sortable = 'id' | 'createdAt';
+export type Include = 'products' | 'tests';
 
 export type RefillQuery = QueryPagination & {
-  include?: 'products'[];
+  include?: Include[];
   sortByAsc?: Sortable[];
   sortByDesc?: Sortable[];
 };
 
+interface TestInput {
+  id: number;
+  value: number;
+}
+
 export type RefillCreateBody = {
+  tests?: TestInput[];
   productsIds?: number[];
 };
 
 export type RefillUpdateBody = {
-  productId: number;
+  tests?: TestInput[];
+  productId?: number;
 };

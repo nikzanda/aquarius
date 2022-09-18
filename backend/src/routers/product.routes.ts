@@ -6,12 +6,14 @@ import { commonsValidations } from '../helpers/queryValidations';
 import { ProductCategory } from '.prisma/client';
 
 const router = Router();
+const checkInclude = query('include').toArray().isIn(['refills']).optional();
 
 router
   .route('')
-  .get([...commonsValidations, query('name').isString().optional()], validate, productController.findAll)
+  .get([...commonsValidations, query('name').isString().optional(), checkInclude], validate, productController.findAll)
   .post(
     [
+      checkInclude,
       body('name').isString(),
       body('category').isIn(Object.keys(ProductCategory)),
       body('quantity').isString().optional(),
@@ -24,9 +26,10 @@ router
 
 router
   .route('/:id')
-  .get(productController.findOne)
+  .get([checkInclude], productController.findOne)
   .patch(
     [
+      checkInclude,
       body('name').isString().optional(),
       body('category').isIn(Object.keys(ProductCategory)).optional(),
       body('quantity').isString().optional(),
@@ -35,6 +38,7 @@ router
     ],
     validate,
     productController.update
-  );
+  )
+  .delete(productController.remove);
 
 export default router;

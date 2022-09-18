@@ -5,7 +5,9 @@
     "actions": "Azioni",
     "quantity": "Quantità",
     "today": "Oggi",
-    "tomorrow": "Domani"
+    "tomorrow": "Domani",
+    "add": "Aggiungi",
+    "search": "Cerca"
   },
   "validations": {
     "required": "Campo obbligatorio"
@@ -16,9 +18,29 @@
     "lastRefill": "Ultimo cambio",
     "changeWater": "Cambia acqua",
     "sureToRefill": "Sei sicuro di voler cambiare l'acqua?",
-    "table": {
-      "name": "Prodotto",
-      "category": "Categoria"
+    "newTest": "Nuovo test",
+    "tab": {
+      "tests": {
+        "table": {
+          "name": "Test",
+          "value": "Valore",
+          "createdAt": "Eseguito il"
+        }
+      },
+      "products": {
+        "table": {
+          "name": "Prodotto",
+          "category": "Categoria"
+        }
+      }
+    },
+    "tests": {
+      "pageTitle": "Esegui nuovo test",
+      "form": {
+        "strip": "Striscia",
+        "test": "Test",
+        "value": "Valore"
+      }
     }
   },
   "filters": {
@@ -54,5 +76,38 @@
     "nextUse": "Tra {days} giorni",
     "notUsedYet": "Non ancora utilizzato",
     "sureToUse": "Sei sicuro di voler usare il prodotto?"
+  },
+  "tests": {
+    "name": "Test",
+    "sureToDelete": "Sei sicuro di voler cancellare il test?",
+    "createPage": {
+      "title": "Crea nuovo test"
+    },
+    "table": {
+      "name": "Nome",
+      "minLevel": "Soglia minima",
+      "maxLevel": "Soglia massima"
+    },
+    "form": {
+      "name": "Nome",
+      "minLevel": "Soglia minima",
+      "maxLevel": "Soglia massima"
+    }
+  },
+  "strips": {
+    "name": "Strisce",
+    "sureToDelete": "Sei sicuro di voler cancellare la striscia?",
+    "createPage": {
+      "title": "Crea nuova striscia"
+    },
+    "table": {
+      "name": "Nome",
+      "description": "Descrizione"
+    },
+    "form": {
+      "name": "Nome",
+      "description": "Descrizione",
+      "tests": "Test"
+    }
   }
 }

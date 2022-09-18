@@ -30,6 +30,7 @@ export type Filter = {
 export type Refill = {
   id: number;
   createdAt: string;
+  tests: TestsOnRefills[];
   products: ProductsOnRefills[];
 };
 
@@ -60,6 +61,57 @@ export type ProductsOnRefills = {
   refill: Refill;
   product: Product;
 };
+
+/**
+ * Model Strip
+ *
+ */
+export type Strip = {
+  id: number
+  name: string
+  description: string | null
+  createdAt: string
+  tests: TestsOnStrips[];
+}
+
+/**
+ * Model Test
+ *
+ */
+export type Test = {
+  id: number
+  name: string
+  minLevel: number | null
+  maxLevel: number | null
+  createdAt: string
+  strips: TestsOnStrips[];
+  refills: TestsOnRefills[];
+}
+
+/**
+ * Model TestsOnStrips
+ *
+ */
+export type TestsOnStrips = {
+  stripId: number
+  testId: number
+  strip: Strip;
+  test: Test;
+}
+
+/**
+ * Model TestsOnRefills
+ *
+ */
+export type TestsOnRefills = {
+  id: number
+  refillId: number
+  testId: number
+  value: number
+  createdAt: Date
+  refill: Refill;
+  test: Test;
+}
 
 /**
  * Enums

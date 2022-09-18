@@ -1,20 +1,20 @@
 import { Request, Response } from 'express';
-import { getInclude } from '../helpers/product';
+import { getInclude } from '../helpers/test';
 import { FindAllResponse, QueryParamId, TypedRequestQuery, TypedResponse } from '../types/commons';
-import { Include, ProductCreateBody, ProductQuery, ProductUpdateBody } from '../types/product';
+import { Include, TestCreateBody, TestQuery, TestUpdateBody } from '../types/test';
 import client from '../../prisma/index';
 
-const { product: productDB } = client;
+const { test: testDB } = client;
 
-export const findAll = async (req: TypedRequestQuery<ProductQuery>, res: TypedResponse<FindAllResponse>) => {
-  const { skip, take, name, include, sortByAsc, sortByDesc } = req.query;
+export const findAll = async (req: TypedRequestQuery<TestQuery>, res: TypedResponse<FindAllResponse>) => {
+  const { skip, take, include, sortByAsc, sortByDesc, name } = req.query;
 
   const where = {
     ...(name && { name: { search: name } }),
   };
 
   const [result, count] = await Promise.all([
-    productDB.findMany({
+    testDB.findMany({
       skip: +skip,
       ...(+take > 0 && { take: +take }),
       orderBy: [
@@ -26,7 +26,7 @@ export const findAll = async (req: TypedRequestQuery<ProductQuery>, res: TypedRe
       }),
       where,
     }),
-    productDB.count({ where }),
+    testDB.count({ where }),
   ]);
 
   res.json({
@@ -39,7 +39,7 @@ export const findOne = async (req: Request<QueryParamId, unknown, unknown, { inc
   const { id } = req.params;
   const { include } = req.query;
 
-  const product = await productDB.findUnique({
+  const test = await testDB.findUnique({
     ...(include?.length && {
       include: getInclude(include),
     }),
@@ -48,46 +48,41 @@ export const findOne = async (req: Request<QueryParamId, unknown, unknown, { inc
     },
   });
 
-  res.json(product);
+  res.json(test);
 };
 
-export const create = async (
-  req: Request<unknown, unknown, ProductCreateBody, { include: Include[] }>,
-  res: Response
-) => {
+export const create = async (req: Request<unknown, unknown, TestCreateBody, { include: Include[] }>, res: Response) => {
   const { include } = req.query;
-  const { name, category, useWhenRefilling, frequencyInDays, quantity } = req.body;
+  const { name, minLevel, maxLevel } = req.body;
 
   try {
-    const newProduct = await productDB.create({
+    const newTest = await testDB.create({
       ...(include?.length && {
         include: getInclude(include),
       }),
       data: {
         name,
-        category,
-        useWhenRefilling,
-        frequencyInDays,
-        quantity,
+        minLevel,
+        maxLevel,
       },
     });
 
-    res.status(201).json(newProduct);
+    res.status(201).json(newTest);
   } catch (error) {
     res.status(400).json(error);
   }
 };
 
 export const update = async (
-  req: Request<QueryParamId, unknown, ProductUpdateBody, { include: Include[] }>,
+  req: Request<QueryParamId, unknown, TestUpdateBody, { include: Include[] }>,
   res: Response
 ) => {
   const { id } = req.params;
   const { include } = req.query;
-  const { name, category, useWhenRefilling, frequencyInDays, quantity } = req.body;
+  const { name, minLevel, maxLevel } = req.body;
 
   try {
-    const updatedProduct = await productDB.update({
+    const updatedTest = await testDB.update({
       ...(include?.length && {
         include: getInclude(include),
       }),
@@ -96,14 +91,12 @@ export const update = async (
       },
       data: {
         ...(name && { name }),
-        ...(category && { category }),
-        ...(useWhenRefilling != null && { useWhenRefilling }),
-        ...(frequencyInDays && { frequencyInDays }),
-        ...(quantity && { quantity }),
+        ...(minLevel && { minLevel }),
+        ...(maxLevel && { maxLevel }),
       },
     });
 
-    res.json(updatedProduct);
+    res.json(updatedTest);
   } catch (error) {
     res.status(400).json(error);
   }
@@ -113,17 +106,17 @@ export const remove = async (req: Request<QueryParamId>, res: Response) => {
   const { id } = req.params;
 
   try {
-    const product = await productDB.findUnique({
+    const test = await testDB.findUnique({
       where: {
         id: +id,
       },
     });
 
-    if (!product) {
+    if (!test) {
       return res.sendStatus(404);
     }
 
-    await productDB.delete({
+    await testDB.delete({
       where: {
         id: +id,
       },

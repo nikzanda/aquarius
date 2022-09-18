@@ -11,8 +11,8 @@ import { useRefillStore } from '@/stores/refill';
 
 const app = createApp({
   setup() {
-    const refillStore = useRefillStore();
-    refillStore.getLastRefill();
+    const { getLastRefill } = useRefillStore();
+    getLastRefill();
   },
   render: () => h(App),
 });

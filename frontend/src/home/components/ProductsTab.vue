@@ -41,15 +41,17 @@ const columns: DataTableColumns<ProductRefills> = [
       h(
         NSpace,
         { vertical: true },
-        refillDates.map((time) => h(NTime, { time, format: 'dd/MM/yyyy HH:mm' }))
+        {
+          default: () => refillDates.map((time) => h(NTime, { time, format: 'dd/MM/yyyy HH:mm' })),
+        }
       ),
   },
   {
-    title: t('home.table.name'),
+    title: t('home.tab.products.table.name'),
     key: 'name',
   },
   {
-    title: t('home.table.category'),
+    title: t('home.tab.products.table.category'),
     key: 'category',
     render: ({ category }) => {
       const isWaterProductCategory = (category as unknown as string) === 'WATER';
@@ -61,7 +63,7 @@ const columns: DataTableColumns<ProductRefills> = [
         {
           color,
         },
-        h(iconComponent)
+        { default: () => h(iconComponent) }
       );
     },
   },

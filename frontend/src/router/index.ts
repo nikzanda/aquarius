@@ -5,8 +5,18 @@ const router = createRouter({
   routes: [
     {
       path: '',
-      name: 'home',
-      component: () => import('../home/HomePage.vue'),
+      children: [
+        {
+          path: '',
+          name: 'home',
+          component: () => import('../home/HomePage.vue'),
+        },
+        {
+          path: 'water-test',
+          name: 'home.water-test',
+          component: () => import('../home/WaterTest.vue'),
+        },
+      ]
     },
     {
       path: '/filters',
@@ -37,6 +47,46 @@ const router = createRouter({
           component: () => import('../products/ProductUpdate.vue'),
         },
       ],
+    },
+    {
+      path: '/tests',
+      children: [
+        {
+          path: '',
+          name: 'tests.list',
+          component: () => import('../tests/TestsList.vue')
+        },
+        {
+          path: 'new',
+          name: 'tests.create',
+          component: () => import('../tests/TestCreate.vue'),
+        },
+        {
+          path: ':id',
+          name: 'tests.update',
+          component: () => import('../tests/TestUpdate.vue'),
+        },
+      ]
+    },
+    {
+      path: '/strips',
+      children: [
+        {
+          path: '',
+          name: 'strips.list',
+          component: () => import('../strips/StripsList.vue')
+        },
+        {
+          path: 'new',
+          name: 'strips.create',
+          component: () => import('../strips/StripCreate.vue'),
+        },
+        {
+          path: ':id',
+          name: 'strips.update',
+          component: () => import('../strips/StripUpdate.vue'),
+        },
+      ]
     },
     {
       path: '/refills',
