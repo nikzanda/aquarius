@@ -21,5 +21,5 @@ export type RefillCreateBody = {
 
 export type RefillUpdateBody = {
   tests?: TestInput[];
-  productId: number;
+  productId?: number;
 };

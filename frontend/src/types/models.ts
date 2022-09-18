@@ -30,6 +30,7 @@ export type Filter = {
 export type Refill = {
   id: number;
   createdAt: string;
+  tests: TestsOnRefills[];
   products: ProductsOnRefills[];
 };
 
@@ -84,6 +85,7 @@ export type Test = {
   maxLevel: number | null
   createdAt: string
   strips: TestsOnStrips[];
+  refills: TestsOnRefills[];
 }
 
 /**
@@ -94,6 +96,20 @@ export type TestsOnStrips = {
   stripId: number
   testId: number
   strip: Strip;
+  test: Test;
+}
+
+/**
+ * Model TestsOnRefills
+ *
+ */
+export type TestsOnRefills = {
+  id: number
+  refillId: number
+  testId: number
+  value: number
+  createdAt: Date
+  refill: Refill;
   test: Test;
 }
 

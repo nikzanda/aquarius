@@ -47,11 +47,11 @@ const columns: DataTableColumns<ProductRefills> = [
       ),
   },
   {
-    title: t('home.table.name'),
+    title: t('home.tab.products.table.name'),
     key: 'name',
   },
   {
-    title: t('home.table.category'),
+    title: t('home.tab.products.table.category'),
     key: 'category',
     render: ({ category }) => {
       const isWaterProductCategory = (category as unknown as string) === 'WATER';

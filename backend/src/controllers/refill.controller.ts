@@ -129,7 +129,7 @@ export const create = async (
     });
 
     if (testsData.length > 0) {
-      testsOnRefillsDB.createMany({
+      await testsOnRefillsDB.createMany({
         data: testsData.map((testData) => ({
           ...testData,
           refillId: newRefill.id,
@@ -170,18 +170,20 @@ export const update = async (
       );
     }
 
-    const product = await productDB.findUnique({
-      where: {
-        id: productId,
-      },
-    });
+    if (typeof productId === 'number') {
+      const product = await productDB.findUnique({
+        where: {
+          id: productId,
+        },
+      });
 
-    if (!product) {
-      return res.sendStatus(400);
+      if (!product) {
+        return res.sendStatus(400);
+      }
     }
 
     if (testsData.length > 0) {
-      testsOnRefillsDB.createMany({
+      await testsOnRefillsDB.createMany({
         data: testsData.map((testData) => ({
           ...testData,
           refillId: +id,
@@ -197,17 +199,19 @@ export const update = async (
         include: getInclude(include),
       }),
       data: {
-        products: {
-          create: [
-            {
-              product: {
-                connect: {
-                  id: productId,
+        ...(productId && {
+          products: {
+            create: [
+              {
+                product: {
+                  connect: {
+                    id: productId,
+                  },
                 },
               },
-            },
-          ],
-        },
+            ],
+          },
+        }),
       },
     });
 

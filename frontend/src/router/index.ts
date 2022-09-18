@@ -9,6 +9,11 @@ const router = createRouter({
       component: () => import('../home/HomePage.vue'),
     },
     {
+      path: '/water-test',
+      name: 'water.test',
+      component: () => import('../home/WaterTest.vue'),
+    },
+    {
       path: '/filters',
       children: [
         {

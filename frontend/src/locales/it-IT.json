@@ -16,9 +16,24 @@
     "lastRefill": "Ultimo cambio",
     "changeWater": "Cambia acqua",
     "sureToRefill": "Sei sicuro di voler cambiare l'acqua?",
-    "table": {
-      "name": "Prodotto",
-      "category": "Categoria"
+    "newTest": "Nuovo test",
+    "tab": {
+      "tests": {
+        "table": {
+          "name": "Test",
+          "value": "Valore",
+          "createdAt": "Eseguito il"
+        }
+      },
+      "products": {
+        "table": {
+          "name": "Prodotto",
+          "category": "Categoria"
+        }
+      }
+    },
+    "tests": {
+      "pageTitle": "Esegui nuovo test"
     }
   },
   "filters": {

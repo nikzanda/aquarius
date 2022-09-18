@@ -10,13 +10,21 @@ const checkInclude = query('include').toArray().isIn(['products', 'tests']).opti
 router
   .route('')
   .get([...commonsValidations, checkInclude], validate, refillController.findAll)
-  .post([checkInclude, body('productsIds').isArray().optional(), validate], refillController.create);
+  .post(
+    [checkInclude, body('tests').isArray().optional(), body('productsIds').isArray().optional()],
+    validate,
+    refillController.create
+  );
 
 router.get('/last', refillController.findLast);
 
 router
   .route('/:id')
   .get([checkInclude], validate, refillController.findOne)
-  .patch([checkInclude, body('productId').isInt()], validate, refillController.update);
+  .patch(
+    [checkInclude, body('tests').isArray().optional(), body('productId').isInt().optional()],
+    validate,
+    refillController.update
+  );
 
 export default router;
