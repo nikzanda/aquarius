@@ -5,7 +5,9 @@
     "actions": "Azioni",
     "quantity": "Quantità",
     "today": "Oggi",
-    "tomorrow": "Domani"
+    "tomorrow": "Domani",
+    "add": "Aggiungi",
+    "search": "Cerca"
   },
   "validations": {
     "required": "Campo obbligatorio"
@@ -33,7 +35,12 @@
       }
     },
     "tests": {
-      "pageTitle": "Esegui nuovo test"
+      "pageTitle": "Esegui nuovo test",
+      "form": {
+        "strip": "Striscia",
+        "test": "Test",
+        "value": "Valore"
+      }
     }
   },
   "filters": {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { injectStrict } from '@/helpers/injectTypes';
 import { AxiosKey } from '@/symbols';
-import type { Test } from '@/types/models';
+import type { Strip, Test } from '@/types/models';
 import {
   NForm,
   NFormItem,
@@ -11,9 +11,11 @@ import {
   NGi,
   NSpace,
   NButton,
+  NIcon,
   type FormInst,
   type SelectOption,
 } from 'naive-ui';
+import { TrashCan } from '@vicons/carbon';
 import { reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -26,6 +28,10 @@ interface RefillBody {
   tests: TestBody[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps({
+  loading: { type: Boolean, required: true },
+});
 const emits = defineEmits<{
   (e: 'submit', data: RefillBody): void;
 }>();
@@ -41,11 +47,32 @@ const model = reactive({
     },
   ],
 });
-const loading = ref(false);
-const options = ref<SelectOption[]>([]);
+const fetchingTests = ref(false);
+const fetchingStrips = ref(false);
+const optionsTests = ref<SelectOption[]>([]);
+const optionsStrips = ref<SelectOption[]>([]);
+const stripId = ref<number | null>(null);
 
-const handleSearch = (name: string) => {
-  loading.value = true;
+const searchStrip = (name: string) => {
+  fetchingStrips.value = true;
+
+  axios('/strips', {
+    params: {
+      skip: 0,
+      take: 0,
+      ...(name && { name }), // FullTextSearch di Prisma non funziona, ricerca per nome disabilitata
+    },
+  })
+    .then(
+      ({ data: { result } }) =>
+        (optionsStrips.value = result.map(({ id, name }: Strip) => ({ value: id, label: name })))
+    )
+    .catch(() => {})
+    .finally(() => (fetchingStrips.value = false));
+};
+
+const searchTest = (name: string) => {
+  fetchingTests.value = true;
 
   axios('/tests', {
     params: {
@@ -54,9 +81,11 @@ const handleSearch = (name: string) => {
       ...(name && { name }), // FullTextSearch di Prisma non funziona, ricerca per nome disabilitata
     },
   })
-    .then(({ data: { result } }) => (options.value = result.map(({ id, name }: Test) => ({ value: id, label: name }))))
+    .then(
+      ({ data: { result } }) => (optionsTests.value = result.map(({ id, name }: Test) => ({ value: id, label: name })))
+    )
     .catch(() => {})
-    .finally(() => (loading.value = false));
+    .finally(() => (fetchingTests.value = false));
 };
 
 const addTest = () =>
@@ -65,7 +94,10 @@ const addTest = () =>
     value: 0,
   });
 
-handleSearch('');
+const removeTest = (index: number) => model.tests.splice(index, 1);
+
+searchStrip('');
+searchTest('');
 
 const handleSubmit = () => {
   form.value?.validate((errors) => {
@@ -78,12 +110,25 @@ const handleSubmit = () => {
 
 <template>
   <n-form ref="form" :model="model" @submit.prevent="handleSubmit">
+    <!-- <n-form-item :label="t('home.tests.form.strip')">
+      <n-select
+        v-model:value="stripId"
+        :placeholder="t('commons.search')"
+        :options="optionsStrips"
+        :loading="fetchingStrips"
+        remote
+        @search="searchStrip"
+        :style="{ width: '25%' }"
+        clearable
+      />
+    </n-form-item> -->
+
     <n-grid x-gap="20" y-gap="20" cols="1 s:2 m:2 l:2" responsive="screen">
       <template v-for="(test, $index) in model.tests" :key="$index">
         <!-- Test -->
         <n-gi>
           <n-form-item
-            :label="t('home.form.test')"
+            :label="t('home.tests.form.test')"
             :path="`tests[${$index}].id`"
             :rule="{
               required: true,
@@ -93,36 +138,44 @@ const handleSubmit = () => {
             <n-select
               v-model:value="test.id"
               :placeholder="t('commons.search')"
-              :options="options"
-              :loading="loading"
+              :options="optionsTests"
+              :loading="fetchingTests"
               remote
-              @search="handleSearch"
+              @search="searchTest"
             />
           </n-form-item>
         </n-gi>
 
         <!-- Value -->
         <n-gi>
-          <n-form-item
-            :label="t('home.form.value')"
-            :path="`tests[${$index}].value`"
-            :rule="{
-              required: true,
-              message: t('validations.required'),
-            }"
-          >
-            <n-input-number v-model:value="test.value" />
-          </n-form-item>
+          <n-space align="center">
+            <n-form-item
+              :label="t('home.tests.form.value')"
+              :path="`tests[${$index}].value`"
+              :rule="{
+                required: true,
+                message: t('validations.required'),
+              }"
+            >
+              <n-input-number v-model:value="test.value" :style="{ width: '100%' }" />
+            </n-form-item>
+
+            <n-button tertiary circle type="error" @click="removeTest($index)">
+              <template #icon>
+                <n-icon><trash-can /></n-icon>
+              </template>
+            </n-button>
+          </n-space>
         </n-gi>
       </template>
     </n-grid>
 
     <n-space justify="end">
-      <n-button tertiary type="info" @click="addTest">
+      <n-button tertiary type="info" @click="addTest" :disabled="loading">
         {{ t('commons.add') }}
       </n-button>
 
-      <n-button tertiary type="primary" attr-type="submit">
+      <n-button tertiary type="primary" attr-type="submit" :loading="loading" :disabled="model.tests.length === 0">
         {{ t('commons.create') }}
       </n-button>
     </n-space>

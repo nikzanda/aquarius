@@ -47,7 +47,7 @@ const columns: DataTableColumns<TestsOnRefills> = [
 <template>
   <n-space vertical>
     <n-space justify="end">
-      <n-button tertiary type="info" @click="$router.push({ name: 'water.test' })">
+      <n-button tertiary type="info" @click="$router.push({ name: 'home.water-test' })">
         {{ t('home.newTest') }}
       </n-button>
     </n-space>

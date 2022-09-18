@@ -5,13 +5,18 @@ const router = createRouter({
   routes: [
     {
       path: '',
-      name: 'home',
-      component: () => import('../home/HomePage.vue'),
-    },
-    {
-      path: '/water-test',
-      name: 'water.test',
-      component: () => import('../home/WaterTest.vue'),
+      children: [
+        {
+          path: '',
+          name: 'home',
+          component: () => import('../home/HomePage.vue'),
+        },
+        {
+          path: 'water-test',
+          name: 'home.water-test',
+          component: () => import('../home/WaterTest.vue'),
+        },
+      ]
     },
     {
       path: '/filters',
