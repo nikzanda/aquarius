@@ -7,7 +7,13 @@
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "vite:dev": "vite",
+    "vite:build": "vue-tsc --noEmit && vite build",
+    "vite:preview": "vite preview",
+    "app:dev": "tsc && concurrently vite \" electron .\" \"tsc -w\"",
+    "app:build": "yarn vite:build && tsc && electron-builder",
+    "app:preview": "yarn vite:build && tsc && electron ."
   },
   "dependencies": {
     "axios": "^0.27.2",
@@ -27,6 +33,9 @@
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
     "@vue/tsconfig": "^0.1.3",
+    "concurrently": "^7.4.0",
+    "electron": "^20.2.0",
+    "electron-builder": "^23.3.3",
     "eslint": "^8.21.0",
     "eslint-plugin-vue": "^9.3.0",
     "naive-ui": "^2.32.2",
@@ -36,5 +45,37 @@
     "vfonts": "^0.0.3",
     "vite": "^3.0.4",
     "vue-tsc": "^0.39.5"
+  },
+  "build": {
+    "appId": "Aquarius",
+    "asar": true,
+    "directories": {
+      "buildResources": "assets",
+      "output": "release/${version}"
+    },
+    "files": [
+      "dist"
+    ],
+    "mac": {
+      "artifactName": "${productName}_${version}.${ext}",
+      "target": [
+        "dmg"
+      ]
+    },
+    "win": {
+      "target": [{
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }],
+      "artifactName": "${productName}_${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
+    }
   }
 }
