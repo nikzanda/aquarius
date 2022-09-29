@@ -75,13 +75,10 @@ export const findLast = async (req: Request, res: Response) => {
   res.json(lastRefill);
 };
 
-export const create = async (
-  req: Request<unknown, unknown, unknown, { include: Include[] }>,
-  res: Response
-) => {
+export const create = async (req: Request<unknown, unknown, unknown, { include: Include[] }>, res: Response) => {
   const { include } = req.query;
 
-  type ProductsOnRefillsWithProduct = ProductsOnRefills & { product: Product }
+  type ProductsOnRefillsWithProduct = ProductsOnRefills & { product: Product };
 
   try {
     const productsOnRefills: ProductsOnRefillsWithProduct[] = [];
@@ -98,21 +95,22 @@ export const create = async (
           where: {
             product: {
               useWhenRefilling: false,
-            }
-          }
+            },
+          },
         },
       },
     });
 
     if (lastRefill?.products.length) {
-      productsOnRefills.push(...lastRefill.products
-        .sort(({ createdAt: dateA }, { createdAt: dateB }) => dateB.getTime() - dateA.getTime())
-        .reduce((acc, productOnRefill) => {
-          if (!acc.some(({ product: { id } }) => id === productOnRefill.product.id)) {
-            acc.push(productOnRefill);
-          }
-          return acc;
-        }, [] as ProductsOnRefillsWithProduct[])
+      productsOnRefills.push(
+        ...lastRefill.products
+          .sort(({ createdAt: dateA }, { createdAt: dateB }) => dateB.getTime() - dateA.getTime())
+          .reduce((acc, productOnRefill) => {
+            if (!acc.some(({ product: { id } }) => id === productOnRefill.product.id)) {
+              acc.push(productOnRefill);
+            }
+            return acc;
+          }, [] as ProductsOnRefillsWithProduct[])
       );
     }
 

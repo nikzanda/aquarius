@@ -39,8 +39,13 @@ export const useRefillStore = defineStore('refill', () => {
   };
 
   const createRefill = () => {
-    return axios.post('/refills')
+    return axios.post('/refills', undefined, {
+      params: {
+        include: 'products'
+      }
+    })
       .then(({ data }) => {
+        console.log('data', data)
         lastRefill.value = data
         window.$message.success('ok!')
         return data
