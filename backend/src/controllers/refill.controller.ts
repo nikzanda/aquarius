@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { getInclude } from '../helpers/refill';
 import { FindAllResponse, QueryParamId, TypedRequestQuery, TypedResponse } from '../types/commons';
-import { Include, RefillCreateBody, RefillQuery, RefillUpdateBody } from '../types/refill';
+import { Include, RefillQuery, RefillUpdateBody } from '../types/refill';
 import client from '../../prisma/index';
+import { Product, ProductsOnRefills } from '@prisma/client';
 
 const { refill: refillDB, test: testDB, product: productDB, testsOnRefills: testsOnRefillsDB } = client;
 
@@ -75,41 +76,43 @@ export const findLast = async (req: Request, res: Response) => {
 };
 
 export const create = async (
-  req: Request<unknown, unknown, RefillCreateBody, { include: Include[] }>,
+  req: Request<unknown, unknown, unknown, { include: Include[] }>,
   res: Response
 ) => {
   const { include } = req.query;
-  const { tests: testsInput, productsIds } = req.body;
-  const testsData = [];
-  const products = [];
+
+  type ProductsOnRefillsWithProduct = ProductsOnRefills & { product: Product }
 
   try {
-    if (testsInput && testsInput.length > 0) {
-      const tests = await testDB.findMany({
-        where: {
-          id: {
-            in: testsInput.map(({ id }) => id),
+    const productsOnRefills: ProductsOnRefillsWithProduct[] = [];
+    const lastRefill = await refillDB.findFirst({
+      take: 1,
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        products: {
+          include: {
+            product: true,
           },
-        },
-      });
-
-      testsData.push(
-        ...tests.map(({ id }) => ({
-          testId: id,
-          value: testsInput.find(({ id: testInputId }) => id === testInputId)?.value || 0,
-        }))
-      );
-    }
-
-    if (productsIds && productsIds.length > 0) {
-      products.push(
-        ...(await productDB.findMany({
           where: {
-            id: {
-              in: productsIds,
-            },
-          },
-        }))
+            product: {
+              useWhenRefilling: false,
+            }
+          }
+        },
+      },
+    });
+
+    if (lastRefill?.products.length) {
+      productsOnRefills.push(...lastRefill.products
+        .sort(({ createdAt: dateA }, { createdAt: dateB }) => dateB.getTime() - dateA.getTime())
+        .reduce((acc, productOnRefill) => {
+          if (!acc.some(({ product: { id } }) => id === productOnRefill.product.id)) {
+            acc.push(productOnRefill);
+          }
+          return acc;
+        }, [] as ProductsOnRefillsWithProduct[])
       );
     }
 
@@ -120,22 +123,14 @@ export const create = async (
       data: {
         products: {
           create: [
-            ...products.map(({ id }) => ({
-              product: { connect: { id } },
+            ...productsOnRefills.map(({ product: { id: productId }, createdAt }) => ({
+              product: { connect: { id: productId } },
+              createdAt,
             })),
           ],
         },
       },
     });
-
-    if (testsData.length > 0) {
-      await testsOnRefillsDB.createMany({
-        data: testsData.map((testData) => ({
-          ...testData,
-          refillId: newRefill.id,
-        })),
-      });
-    }
 
     res.status(201).json(newRefill);
   } catch (error) {

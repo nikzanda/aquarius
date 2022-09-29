@@ -14,11 +14,6 @@ interface TestInput {
   value: number;
 }
 
-export type RefillCreateBody = {
-  tests?: TestInput[];
-  productsIds?: number[];
-};
-
 export type RefillUpdateBody = {
   tests?: TestInput[];
   productId?: number;
