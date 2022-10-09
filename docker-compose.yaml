@@ -6,4 +6,4 @@ services:
       - 3307:3306
     environment:
       MYSQL_DATABASE: 'aquarius'
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'

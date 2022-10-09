@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
-const frontendPath = __dirname + '/../../frontend/dist';
+const frontendPath = __dirname + '/../../../frontend/dist';
 app.use('/', express.static(frontendPath));
 app.use('/api', apiRouter);
 
