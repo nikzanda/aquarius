@@ -87,8 +87,8 @@ model Strip {
 model Test {
   id        Int      @id @default(autoincrement())
   name      String
-  minLevel  Int?
-  maxLevel  Int?
+  minLevel  Float?
+  maxLevel  Float?
   createdAt DateTime @default(now())
 
   strips  TestsOnStrips[]

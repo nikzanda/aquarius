@@ -11,7 +11,12 @@ router
   .route('')
   .get([...commonsValidations, checkInclude], validate, testController.findAll)
   .post(
-    [checkInclude, body('name').isString(), body('minLevel').isInt().optional(), body('maxLevel').isInt().optional()],
+    [
+      checkInclude,
+      body('name').isString(),
+      body('minLevel').isFloat().optional(),
+      body('maxLevel').isFloat().optional(),
+    ],
     validate,
     testController.create
   );
@@ -23,8 +28,8 @@ router
     [
       checkInclude,
       body('name').isString().optional(),
-      body('minLevel').isInt().optional(),
-      body('maxLevel').isInt().optional(),
+      body('minLevel').isFloat().optional(),
+      body('maxLevel').isFloat().optional(),
     ],
     validate,
     testController.update

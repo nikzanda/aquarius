@@ -45,7 +45,6 @@ export const useRefillStore = defineStore('refill', () => {
       }
     })
       .then(({ data }) => {
-        console.log('data', data)
         lastRefill.value = data
         window.$message.success('ok!')
         return data

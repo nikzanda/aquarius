@@ -69,6 +69,8 @@ const handleSubmit = () => {
           <n-input-number
             v-model:value="model.minLevel"
             :min="0"
+            :precision="2"
+            :step="0.01"
             :placeholder="t('tests.form.minLevel')"
             :style="{ width: '100%' }"
           />
@@ -81,6 +83,8 @@ const handleSubmit = () => {
           <n-input-number
             v-model:value="model.maxLevel"
             :min="model.minLevel || 0"
+            :precision="2"
+            :step="0.01"
             :placeholder="t('tests.form.maxLevel')"
             :style="{ width: '100%' }"
           />

@@ -7,6 +7,7 @@ import type { Test } from '@/types/models';
 import { NPageHeader, NH1, NSpace, NButton, type DataTableColumns, NDataTable, NIcon, NPopconfirm } from 'naive-ui';
 import { useRouter } from 'vue-router';
 import { Edit, TrashCan } from '@vicons/carbon';
+import { toQuantity } from '@/helpers/helpers';
 
 const { t } = useI18n();
 const axios = injectStrict(AxiosKey);
@@ -42,10 +43,12 @@ const columns: DataTableColumns<Test> = [
   {
     title: t('tests.table.minLevel'),
     key: 'minLevel',
+    render: ({minLevel}) => minLevel && toQuantity(minLevel)
   },
   {
     title: t('tests.table.maxLevel'),
     key: 'maxLevel',
+    render: ({maxLevel}) => maxLevel && toQuantity(maxLevel)
   },
   {
     title: t('commons.actions'),
