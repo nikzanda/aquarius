@@ -2,10 +2,9 @@
 import { useRefillStore } from '@/stores/refill';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
-import { computed, h } from 'vue';
-import { NDataTable, type DataTableColumns, NSpace, NTime, NButton } from 'naive-ui';
-import type { TestsOnRefills } from '@/types/models';
-import { toQuantity } from '@/helpers/helpers';
+import { computed } from 'vue';
+import { NSpace, NButton } from 'naive-ui';
+import TestsTable from '@/commons/TestsTable.vue';
 
 const { t } = useI18n();
 const store = useRefillStore();
@@ -14,35 +13,6 @@ const tests = computed(() => {
   const { tests = [] } = lastRefill.value || {};
   return tests;
 });
-
-const columns: DataTableColumns<TestsOnRefills> = [
-  {
-    title: t('home.tab.tests.table.name'),
-    key: 'name',
-    render: ({ test: { name } }) => name,
-  },
-  {
-    title: t('home.tab.tests.table.value'),
-    key: 'value',
-    render: ({ value, test: { minLevel, maxLevel } }) => {
-      const hasLevels = minLevel != null && maxLevel != null;
-      let color = undefined;
-      let levels = undefined;
-
-      if (hasLevels) {
-        color = value >= minLevel && value <= maxLevel ? '#2dc937' : 'red';
-        levels = h('span', { style: { color: 'grey' } }, ` (${toQuantity(minLevel)} - ${toQuantity(maxLevel)})`);
-      }
-
-      return h('span', { style: { color } }, [toQuantity(value), levels]);
-    },
-  },
-  {
-    title: t('home.tab.tests.table.createdAt'),
-    key: 'createdAt',
-    render: ({ createdAt }) => h(NTime, { time: new Date(createdAt), format: 'dd/MM/yyyy HH:mm' }),
-  },
-];
 </script>
 
 <template>
@@ -53,6 +23,6 @@ const columns: DataTableColumns<TestsOnRefills> = [
       </n-button>
     </n-space>
 
-    <n-data-table :columns="columns" :data="tests" :row-key="({ id }) => id" />
+    <tests-table :tests="tests" />
   </n-space>
 </template>

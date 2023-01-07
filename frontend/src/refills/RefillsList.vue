@@ -2,11 +2,13 @@
 import { injectStrict } from '@/helpers/injectTypes';
 import { AxiosKey } from '@/symbols';
 import type { Refill } from '@/types/models';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, h } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { NPageHeader, NH1, NDataTable } from 'naive-ui';
+import { NPageHeader, NH1, NDataTable, NTabs, NTabPane } from 'naive-ui';
 import type { DataTableColumns, PaginationProps } from 'naive-ui';
 import { format } from 'date-fns';
+import TestsTable from '@/commons/TestsTable.vue';
+import ProductsTable from '@/commons/ProductsTable.vue';
 
 const { t } = useI18n();
 const axios = injectStrict(AxiosKey);
@@ -28,8 +30,29 @@ const pagination = reactive<PaginationProps>({
 const columns: DataTableColumns<Refill> = [
   {
     type: 'expand',
-    renderExpand: ({ products }) => {
-      return JSON.stringify(products);
+    renderExpand: ({ tests, products }) => {
+      return h(
+        NTabs,
+        { type: 'line', animated: true },
+        {
+          default: () => [
+            h(
+              NTabPane,
+              { name: 'tests', tab: t('tests.name') },
+              {
+                default: () => h(TestsTable, { tests }),
+              }
+            ),
+            h(
+              NTabPane,
+              { name: 'products', tab: t('products.name') },
+              {
+                default: () => h(ProductsTable, { products }),
+              }
+            ),
+          ],
+        }
+      );
     },
   },
   {
@@ -49,6 +72,7 @@ const fetchData = () => {
       skip: (pagination.page! - 1) * pagination.pageSize!,
       take: pagination.pageSize,
       sortByDesc: 'createdAt',
+      include: ['tests', 'products'],
     },
   })
     .then(({ data: { result, count } }) => {
