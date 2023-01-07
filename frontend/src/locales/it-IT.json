@@ -109,5 +109,11 @@
       "description": "Descrizione",
       "tests": "Test"
     }
+  },
+  "refills": {
+    "name": "Cambi acqua",
+    "table": {
+      "createdAt": "Cambiato avvenuto il"
+    }
   }
 }

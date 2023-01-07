@@ -43,12 +43,12 @@ const columns: DataTableColumns<Test> = [
   {
     title: t('tests.table.minLevel'),
     key: 'minLevel',
-    render: ({minLevel}) => minLevel && toQuantity(minLevel)
+    render: ({ minLevel }) => minLevel && toQuantity(minLevel),
   },
   {
     title: t('tests.table.maxLevel'),
     key: 'maxLevel',
-    render: ({maxLevel}) => maxLevel && toQuantity(maxLevel)
+    render: ({ maxLevel }) => maxLevel && toQuantity(maxLevel),
   },
   {
     title: t('commons.actions'),

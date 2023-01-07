@@ -16,7 +16,7 @@ const router = createRouter({
           name: 'home.water-test',
           component: () => import('../home/WaterTest.vue'),
         },
-      ]
+      ],
     },
     {
       path: '/filters',
@@ -54,7 +54,7 @@ const router = createRouter({
         {
           path: '',
           name: 'tests.list',
-          component: () => import('../tests/TestsList.vue')
+          component: () => import('../tests/TestsList.vue'),
         },
         {
           path: 'new',
@@ -66,7 +66,7 @@ const router = createRouter({
           name: 'tests.update',
           component: () => import('../tests/TestUpdate.vue'),
         },
-      ]
+      ],
     },
     {
       path: '/strips',
@@ -74,7 +74,7 @@ const router = createRouter({
         {
           path: '',
           name: 'strips.list',
-          component: () => import('../strips/StripsList.vue')
+          component: () => import('../strips/StripsList.vue'),
         },
         {
           path: 'new',
@@ -86,7 +86,7 @@ const router = createRouter({
           name: 'strips.update',
           component: () => import('../strips/StripUpdate.vue'),
         },
-      ]
+      ],
     },
     {
       path: '/refills',

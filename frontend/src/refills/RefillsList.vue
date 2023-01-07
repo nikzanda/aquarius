@@ -2,16 +2,22 @@
 import { injectStrict } from '@/helpers/injectTypes';
 import { AxiosKey } from '@/symbols';
 import type { Refill } from '@/types/models';
-import { reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { NPageHeader, NH1, NDataTable, type DataTableColumns, NButton } from 'naive-ui';
+import { NPageHeader, NH1, NDataTable, type DataTableColumns } from 'naive-ui';
 import { format } from 'date-fns';
-import { h } from 'vue';
 
 const { t } = useI18n();
 const axios = injectStrict(AxiosKey);
 
 const refills = reactive<Refill[]>([]);
+const loading = ref(true);
+const pagination = reactive({
+  page: 1,
+  pageCount: 1,
+  pageSize: 3,
+});
+
 const columns: DataTableColumns<Refill> = [
   {
     type: 'expand',
@@ -20,37 +26,63 @@ const columns: DataTableColumns<Refill> = [
     },
   },
   {
-    title: t('refills.createdAt'),
+    title: t('refills.table.createdAt'),
     key: 'createdAt',
     render({ createdAt }) {
       return format(new Date(createdAt), 'dd/MM/yyyy HH:mm');
     },
   },
-  {
-    title: t('commons.actions'),
-    key: 'actions',
-    render(row) {
-      return h(
-        NButton,
-        {
-          size: 'small',
-          onClick: () => console.log(row),
-        },
-        { default: () => t('refills.add') }
-      );
-    },
-  },
+  // {
+  //   title: t('commons.actions'),
+  //   key: 'actions',
+  //   render(row) {
+  //     return h(
+  //       NButton,
+  //       {
+  //         size: 'small',
+  //         onClick: () => console.log(row),
+  //       },
+  //       { default: () => t('refills.add') }
+  //     );
+  //   },
+  // },
 ];
 
-axios('/refills', {
-  params: {
-    skip: 0,
-    take: 0,
-    sortByDesc: 'createdAt',
-  },
-})
-  .then(({ data: { result } }) => refills.push(...result))
-  .catch(console.error); // TODO: gestire errore globalmente
+const fetchData = () => {
+  loading.value = true;
+
+  axios('/refills', {
+    params: {
+      skip: (pagination.page - 1) * pagination.pageSize,
+      take: pagination.pageSize,
+      sortByDesc: 'createdAt',
+    },
+  })
+    .then(({ data: { result, count } }) => {
+      refills.splice(0, refills.length);
+      refills.push(...result);
+      pagination.pageCount = Math.ceil(count / pagination.pageSize);
+    })
+    .catch(console.error) // TODO: gestire errore globalmente
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+onMounted(() => {
+  fetchData();
+});
+
+const handleSorterChange = () => {};
+
+const handlePageChange = (currentPage: number) => {
+  if (loading.value) {
+    return;
+  }
+
+  pagination.page = currentPage;
+  fetchData();
+};
 </script>
 
 <template>
@@ -60,5 +92,14 @@ axios('/refills', {
     </template>
   </n-page-header>
 
-  <n-data-table :columns="columns" :data="refills" :row-key="({ id }) => id" />
+  <n-data-table
+    remote
+    :columns="columns"
+    :data="refills"
+    :loading="loading"
+    :pagination="pagination"
+    :row-key="({ id }) => id"
+    @update:sorter="handleSorterChange"
+    @update:page="handlePageChange"
+  />
 </template>

@@ -18,8 +18,8 @@ export const useRefillStore = defineStore('refill', () => {
   const getLastRefill = () => {
     return axios('/refills/last')
       .then(({ data }) => {
-        lastRefill.value = data
-        return data
+        lastRefill.value = data;
+        return data;
       })
       .catch(Promise.reject);
   };
@@ -39,18 +39,19 @@ export const useRefillStore = defineStore('refill', () => {
   };
 
   const createRefill = () => {
-    return axios.post('/refills', undefined, {
-      params: {
-        include: 'products'
-      }
-    })
+    return axios
+      .post('/refills', undefined, {
+        params: {
+          include: 'products',
+        },
+      })
       .then(({ data }) => {
-        lastRefill.value = data
-        window.$message.success('ok!')
-        return data
+        lastRefill.value = data;
+        window.$message.success('ok!');
+        return data;
       })
       .catch(Promise.reject);
-  }
+  };
 
   return {
     lastRefill,
@@ -58,6 +59,6 @@ export const useRefillStore = defineStore('refill', () => {
     count,
     getLastRefill,
     updateLastRefill,
-    createRefill
+    createRefill,
   };
 });
