@@ -4,7 +4,8 @@ import { AxiosKey } from '@/symbols';
 import type { Refill } from '@/types/models';
 import { onMounted, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { NPageHeader, NH1, NDataTable, type DataTableColumns } from 'naive-ui';
+import { NPageHeader, NH1, NDataTable } from 'naive-ui';
+import type { DataTableColumns, PaginationProps } from 'naive-ui'
 import { format } from 'date-fns';
 
 const { t } = useI18n();
@@ -12,10 +13,16 @@ const axios = injectStrict(AxiosKey);
 
 const refills = reactive<Refill[]>([]);
 const loading = ref(true);
-const pagination = reactive({
+const pagination = reactive<PaginationProps>({
   page: 1,
   pageCount: 1,
-  pageSize: 3,
+  pageSize: 10,
+  defaultPageSize: 10,
+  pageSizes: [5, 10, 20, 50],
+  showSizePicker: true,
+  prefix({ itemCount: total }) {
+    return t('commons.total', { total })
+  },
 });
 
 const columns: DataTableColumns<Refill> = [
@@ -32,20 +39,6 @@ const columns: DataTableColumns<Refill> = [
       return format(new Date(createdAt), 'dd/MM/yyyy HH:mm');
     },
   },
-  // {
-  //   title: t('commons.actions'),
-  //   key: 'actions',
-  //   render(row) {
-  //     return h(
-  //       NButton,
-  //       {
-  //         size: 'small',
-  //         onClick: () => console.log(row),
-  //       },
-  //       { default: () => t('refills.add') }
-  //     );
-  //   },
-  // },
 ];
 
 const fetchData = () => {
@@ -53,7 +46,7 @@ const fetchData = () => {
 
   axios('/refills', {
     params: {
-      skip: (pagination.page - 1) * pagination.pageSize,
+      skip: (pagination.page! - 1) * pagination.pageSize!,
       take: pagination.pageSize,
       sortByDesc: 'createdAt',
     },
@@ -61,7 +54,7 @@ const fetchData = () => {
     .then(({ data: { result, count } }) => {
       refills.splice(0, refills.length);
       refills.push(...result);
-      pagination.pageCount = Math.ceil(count / pagination.pageSize);
+      pagination.pageCount = Math.ceil(count / pagination.pageSize!);
     })
     .catch(console.error) // TODO: gestire errore globalmente
     .finally(() => {
@@ -73,8 +66,6 @@ onMounted(() => {
   fetchData();
 });
 
-const handleSorterChange = () => {};
-
 const handlePageChange = (currentPage: number) => {
   if (loading.value) {
     return;
@@ -83,6 +74,16 @@ const handlePageChange = (currentPage: number) => {
   pagination.page = currentPage;
   fetchData();
 };
+
+const handlePageSizeChange = (currentPageSize: number) => {
+  if (loading.value) {
+    return;
+  }
+
+  pagination.pageSize = currentPageSize
+  pagination.page = 1
+  fetchData()
+}
 </script>
 
 <template>
@@ -99,7 +100,7 @@ const handlePageChange = (currentPage: number) => {
     :loading="loading"
     :pagination="pagination"
     :row-key="({ id }) => id"
-    @update:sorter="handleSorterChange"
     @update:page="handlePageChange"
+    @update:page-size="handlePageSizeChange"
   />
 </template>
