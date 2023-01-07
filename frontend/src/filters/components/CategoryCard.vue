@@ -18,8 +18,9 @@ import {
   NH3,
   NTooltip,
   useMessage,
+  NBadge,
 } from 'naive-ui';
-import { DotMark, Renew, TrashCan, Information } from '@vicons/carbon';
+import { Renew, TrashCan, Information } from '@vicons/carbon';
 import { getImageUrl } from '../../helpers/helpers';
 import { differenceInDays } from 'date-fns';
 import { useI18n } from 'vue-i18n';
@@ -41,18 +42,18 @@ const daysBeforeExpire = computed(() =>
   filter.value ? differenceInDays(new Date(filter.value.expirationDate), new Date()) + 1 : -1
 );
 
-const getLightColor = () => {
-  if (!filter.value) return 'grey';
+const getBadgeType = () => {
+  if (!filter.value) return 'default';
 
   switch (true) {
     case daysBeforeExpire.value >= 3:
-      return '#2dc937';
+      return 'success';
 
     case daysBeforeExpire.value < 3 && daysBeforeExpire.value > 0:
-      return '#efb700';
+      return 'warning';
 
     case daysBeforeExpire.value <= 0:
-      return 'red';
+      return 'error';
   }
 };
 
@@ -105,9 +106,13 @@ const renewFilter = async () => {
         <n-gi span="3">
           <n-space justify="space-between">
             <n-h3>
-              <n-icon :color="getLightColor()">
-                <dot-mark />
-              </n-icon>
+              <n-badge
+                :type="getBadgeType()"
+                :processing="!!filter"
+                value="0"
+                dot
+                :color="filter ? undefined : 'grey'"
+              />
               {{ category.name }}
             </n-h3>
             <n-tooltip>
