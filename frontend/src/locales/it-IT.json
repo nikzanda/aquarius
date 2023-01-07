@@ -114,7 +114,7 @@
   "refills": {
     "name": "Cambi acqua",
     "table": {
-      "createdAt": "Cambiato avvenuto il"
+      "createdAt": "Cambio avvenuto il"
     }
   }
 }

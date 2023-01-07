@@ -5,7 +5,7 @@ import type { Refill } from '@/types/models';
 import { onMounted, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { NPageHeader, NH1, NDataTable } from 'naive-ui';
-import type { DataTableColumns, PaginationProps } from 'naive-ui'
+import type { DataTableColumns, PaginationProps } from 'naive-ui';
 import { format } from 'date-fns';
 
 const { t } = useI18n();
@@ -21,7 +21,7 @@ const pagination = reactive<PaginationProps>({
   pageSizes: [5, 10, 20, 50],
   showSizePicker: true,
   prefix({ itemCount: total }) {
-    return t('commons.total', { total })
+    return t('commons.total', { total });
   },
 });
 
@@ -80,10 +80,10 @@ const handlePageSizeChange = (currentPageSize: number) => {
     return;
   }
 
-  pagination.pageSize = currentPageSize
-  pagination.page = 1
-  fetchData()
-}
+  pagination.pageSize = currentPageSize;
+  pagination.page = 1;
+  fetchData();
+};
 </script>
 
 <template>

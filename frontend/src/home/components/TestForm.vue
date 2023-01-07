@@ -157,7 +157,7 @@ const handleSubmit = () => {
                 message: t('validations.required'),
               }"
             >
-              <n-input-number v-model:value="test.value" :style="{ width: '100%' }" />
+              <n-input-number v-model:value="test.value" :precision="2" :step="0.01" :style="{ width: '100%' }" />
             </n-form-item>
 
             <n-button tertiary circle type="error" @click="removeTest($index)">

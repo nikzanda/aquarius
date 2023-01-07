@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n';
 import { computed, h } from 'vue';
 import { NDataTable, type DataTableColumns, NSpace, NTime, NButton } from 'naive-ui';
 import type { TestsOnRefills } from '@/types/models';
+import { toQuantity } from '@/helpers/helpers';
 
 const { t } = useI18n();
 const store = useRefillStore();
@@ -30,10 +31,10 @@ const columns: DataTableColumns<TestsOnRefills> = [
 
       if (hasLevels) {
         color = value >= minLevel && value <= maxLevel ? '#2dc937' : 'red';
-        levels = h('span', { style: { color: 'grey' } }, ` (${minLevel} - ${maxLevel})`);
+        levels = h('span', { style: { color: 'grey' } }, ` (${toQuantity(minLevel)} - ${toQuantity(maxLevel)})`);
       }
 
-      return h('span', { style: { color } }, [value, levels]);
+      return h('span', { style: { color } }, [toQuantity(value), levels]);
     },
   },
   {
