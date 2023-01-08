@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+   RewriteEngine On
+   RewriteBase /aquarius
+   RewriteRule ^aquarius/index\.html$ - [L]
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteRule . /aquarius/index.html [L]
+</IfModule>
+
+Options All -Indexes
