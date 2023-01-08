@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { toQuantity } from '@/helpers/helpers';
-import type { Test, TestsOnRefills } from '@/types/models';
-import { format } from 'date-fns';
-import { type DataTableColumns, NDataTable, NDescriptions, NDescriptionsItem } from 'naive-ui';
+import type { TestsOnRefills } from '@/types/models';
+import { isSameDay, set } from 'date-fns';
+import { type DataTableColumns, NDataTable, NDescriptions, NDescriptionsItem, NTime } from 'naive-ui';
 import { computed, h, type PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+type TestsByData = {
+  date: Date;
+  testsOnRefill: TestsOnRefills[];
+}
 
 const { t } = useI18n();
 
@@ -14,30 +19,32 @@ const props = defineProps({
 
 const testsData = computed(() => {
   return props.tests
-    .reduce((acc: Test[], tOnRefill) => {
-      const index = acc.findIndex(({ id }) => id === tOnRefill.testId);
+    .reduce((acc: TestsByData[], tOnRefill) => {
+      const index = acc.findIndex(({ date }) => isSameDay(date, new Date(tOnRefill.createdAt)));
       if (~index) {
-        acc[index].refills.push(tOnRefill);
+        acc[index].testsOnRefill.push(tOnRefill);
       } else {
         acc.push({
-          ...tOnRefill.test,
-          refills: [tOnRefill],
+          date: set(new Date(tOnRefill.createdAt), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }),
+          testsOnRefill: [tOnRefill],
         });
       }
       return acc;
     }, [])
-    .sort(({ name: nameA }, { name: nameB }) => {
-      if (nameA > nameB) return 1;
-      if (nameA < nameB) return -1;
-      return 0;
-    });
+    .sort(({ date: dateA }, { date: dateB }) => dateB.getTime() - dateA.getTime());
 });
 
-const columns: DataTableColumns<Test> = [
+const defaultExpandedRowKeys = computed(() => {
+  const dateTimes = testsData.value.map(({ date }) => date.getTime())
+  const result = Math.max(...dateTimes);
+  return [result];
+})
+
+const columns: DataTableColumns<TestsByData> = [
   {
     type: 'expand',
-    renderExpand: ({ refills }) => {
-      const items = refills.map(({ value, createdAt, test: { minLevel, maxLevel } }) => {
+    renderExpand: ({ testsOnRefill }) => {
+      const items = testsOnRefill.map(({ value, test: { name, minLevel, maxLevel } }) => {
         const hasLevels = minLevel != null && maxLevel != null;
         let color = 'white';
         let levels: any = undefined;
@@ -47,11 +54,9 @@ const columns: DataTableColumns<Test> = [
           levels = h('span', { style: { color: 'grey' } }, ` (${toQuantity(minLevel)} - ${toQuantity(maxLevel)})`);
         }
 
-        const label = format(new Date(createdAt), 'dd/MM/yyyy HH:mm');
-
         return h(
           NDescriptionsItem,
-          { label },
+          { label: name },
           { default: () => h('span', { style: { color } }, [toQuantity(value), levels]) }
         );
       });
@@ -67,12 +72,12 @@ const columns: DataTableColumns<Test> = [
   },
   {
     title: t('home.tab.tests.table.name'),
-    key: 'name',
-    render: ({ name }) => name,
+    key: 'date',
+    render: ({ date }) => h(NTime, { time: date, format: 'dd/MM/yyyy' }),
   },
 ];
 </script>
 
 <template>
-  <n-data-table :columns="columns" :data="testsData" :row-key="({ id }) => id" />
+  <n-data-table :columns="columns" :data="testsData" :row-key="({ date }) => date.getTime()" :default-expanded-row-keys="defaultExpandedRowKeys" />
 </template>
