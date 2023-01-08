@@ -51,7 +51,7 @@ const fetchingTests = ref(false);
 const fetchingStrips = ref(false);
 const optionsTests = ref<SelectOption[]>([]);
 const optionsStrips = ref<SelectOption[]>([]);
-const stripId = ref<number | null>(null);
+// const stripId = ref<number | null>(null);
 
 const searchStrip = (name: string) => {
   fetchingStrips.value = true;

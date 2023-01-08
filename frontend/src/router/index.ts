@@ -9,12 +9,12 @@ const router = createRouter({
         {
           path: '',
           name: 'home',
-          component: () => import('../home/HomePage.vue'),
+          component: () => import('@/home/HomePage.vue'),
         },
         {
           path: 'water-test',
           name: 'home.water-test',
-          component: () => import('../home/WaterTest.vue'),
+          component: () => import('@/home/WaterTest.vue'),
         },
       ],
     },
@@ -24,7 +24,7 @@ const router = createRouter({
         {
           path: '',
           name: 'filters.list',
-          component: () => import('../filters/FiltersList.vue'),
+          component: () => import('@/filters/FiltersList.vue'),
         },
       ],
     },
@@ -34,17 +34,17 @@ const router = createRouter({
         {
           path: '',
           name: 'products.list',
-          component: () => import('../products/ProductsList.vue'),
+          component: () => import('@/products/ProductsList.vue'),
         },
         {
           path: 'new',
           name: 'products.create',
-          component: () => import('../products/ProductCreate.vue'),
+          component: () => import('@/products/ProductCreate.vue'),
         },
         {
           path: ':id',
           name: 'products.update',
-          component: () => import('../products/ProductUpdate.vue'),
+          component: () => import('@/products/ProductUpdate.vue'),
         },
       ],
     },
@@ -54,17 +54,17 @@ const router = createRouter({
         {
           path: '',
           name: 'tests.list',
-          component: () => import('../tests/TestsList.vue'),
+          component: () => import('@/tests/TestsList.vue'),
         },
         {
           path: 'new',
           name: 'tests.create',
-          component: () => import('../tests/TestCreate.vue'),
+          component: () => import('@/tests/TestCreate.vue'),
         },
         {
           path: ':id',
           name: 'tests.update',
-          component: () => import('../tests/TestUpdate.vue'),
+          component: () => import('@/tests/TestUpdate.vue'),
         },
       ],
     },
@@ -74,17 +74,17 @@ const router = createRouter({
         {
           path: '',
           name: 'strips.list',
-          component: () => import('../strips/StripsList.vue'),
+          component: () => import('@/strips/StripsList.vue'),
         },
         {
           path: 'new',
           name: 'strips.create',
-          component: () => import('../strips/StripCreate.vue'),
+          component: () => import('@/strips/StripCreate.vue'),
         },
         {
           path: ':id',
           name: 'strips.update',
-          component: () => import('../strips/StripUpdate.vue'),
+          component: () => import('@/strips/StripUpdate.vue'),
         },
       ],
     },
@@ -94,7 +94,7 @@ const router = createRouter({
         {
           path: '',
           name: 'refills.list',
-          component: () => import('../refills/RefillsList.vue'),
+          component: () => import('@/refills/RefillsList.vue'),
         },
       ],
     },
