@@ -9,7 +9,7 @@ import { useI18n } from 'vue-i18n';
 type TestsByData = {
   date: Date;
   testsOnRefill: TestsOnRefills[];
-}
+};
 
 const { t } = useI18n();
 
@@ -35,10 +35,10 @@ const testsData = computed(() => {
 });
 
 const defaultExpandedRowKeys = computed(() => {
-  const dateTimes = testsData.value.map(({ date }) => date.getTime())
+  const dateTimes = testsData.value.map(({ date }) => date.getTime());
   const result = Math.max(...dateTimes);
   return [result];
-})
+});
 
 const columns: DataTableColumns<TestsByData> = [
   {
@@ -79,5 +79,10 @@ const columns: DataTableColumns<TestsByData> = [
 </script>
 
 <template>
-  <n-data-table :columns="columns" :data="testsData" :row-key="({ date }) => date.getTime()" :default-expanded-row-keys="defaultExpandedRowKeys" />
+  <n-data-table
+    :columns="columns"
+    :data="testsData"
+    :row-key="({ date }) => date.getTime()"
+    :default-expanded-row-keys="defaultExpandedRowKeys"
+  />
 </template>
