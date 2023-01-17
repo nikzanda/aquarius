@@ -16,7 +16,7 @@ import {
   type SelectOption,
 } from 'naive-ui';
 import { TrashCan } from '@vicons/carbon';
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 interface TestBody {
@@ -28,8 +28,7 @@ interface RefillBody {
   tests: TestBody[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps({
+defineProps({
   loading: { type: Boolean, required: true },
 });
 const emits = defineEmits<{
@@ -42,7 +41,7 @@ const form = ref<FormInst | null>(null);
 const model = reactive({
   tests: [
     {
-      id: 0,
+      id: undefined,
       value: 0,
     },
   ],
@@ -50,8 +49,9 @@ const model = reactive({
 const fetchingTests = ref(false);
 const fetchingStrips = ref(false);
 const optionsTests = ref<SelectOption[]>([]);
+const strips = ref<Strip[]>([]);
 const optionsStrips = ref<SelectOption[]>([]);
-// const stripId = ref<number | null>(null);
+const stripId = ref<number | null>(null);
 
 const searchStrip = (name: string) => {
   fetchingStrips.value = true;
@@ -61,11 +61,15 @@ const searchStrip = (name: string) => {
       skip: 0,
       take: 0,
       ...(name && { name }), // FullTextSearch di Prisma non funziona, ricerca per nome disabilitata
+      include: 'tests'
     },
   })
     .then(
       ({ data: { result } }) =>
-        (optionsStrips.value = result.map(({ id, name }: Strip) => ({ value: id, label: name })))
+        {
+          strips.value = result;
+          optionsStrips.value = result.map(({ id, name }: Strip) => ({ value: id, label: name }))
+        }
     )
     .catch(() => {})
     .finally(() => (fetchingStrips.value = false));
@@ -82,7 +86,9 @@ const searchTest = (name: string) => {
     },
   })
     .then(
-      ({ data: { result } }) => (optionsTests.value = result.map(({ id, name }: Test) => ({ value: id, label: name })))
+      ({ data: { result } }) => {
+        optionsTests.value = result.map(({ id, name }: Test) => ({ value: id, label: name }))
+      }
     )
     .catch(() => {})
     .finally(() => (fetchingTests.value = false));
@@ -90,11 +96,18 @@ const searchTest = (name: string) => {
 
 const addTest = () =>
   model.tests.push({
-    id: 0,
+    id: undefined,
     value: 0,
   });
 
 const removeTest = (index: number) => model.tests.splice(index, 1);
+
+watch(stripId, (newStripId) => {
+  const strip = strips.value.find(({ id }) => id === newStripId)
+  if (strip) {
+    model.tests = strip.tests.map(({ testId }) => ({ id: testId as any, value: 0 }))
+  }
+})
 
 searchStrip('');
 searchTest('');
@@ -102,7 +115,7 @@ searchTest('');
 const handleSubmit = () => {
   form.value?.validate((errors) => {
     if (!errors) {
-      emits('submit', model);
+      emits('submit', model as any);
     }
   });
 };
@@ -110,7 +123,7 @@ const handleSubmit = () => {
 
 <template>
   <n-form ref="form" :model="model" @submit.prevent="handleSubmit">
-    <!-- <n-form-item :label="t('home.tests.form.strip')">
+    <n-form-item :label="t('home.tests.form.strip')">
       <n-select
         v-model:value="stripId"
         :placeholder="t('commons.search')"
@@ -121,7 +134,7 @@ const handleSubmit = () => {
         :style="{ width: '25%' }"
         clearable
       />
-    </n-form-item> -->
+    </n-form-item>
 
     <n-grid x-gap="20" y-gap="20" cols="1 s:2 m:2 l:2" responsive="screen">
       <template v-for="(test, $index) in model.tests" :key="$index">
